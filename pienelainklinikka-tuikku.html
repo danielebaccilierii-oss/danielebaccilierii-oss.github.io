@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Pieneläinklinikka Tuikku Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --hue: 200;
+    --bg: hsl(var(--hue) 25% 96%);
+    --panel: #ffffff;
+    --ink: hsl(var(--hue) 30% 12%);
+    --muted: hsl(var(--hue) 12% 42%);
+    --line: hsl(var(--hue) 18% 88%);
+    --accent: hsl(var(--hue) 62% 38%);
+    --accent-ink: #ffffff;
+    --bot: hsl(var(--hue) 30% 94%);
+    --flag-bg: #fff4d6;
+    --flag-ink: #6b4a00;
+    font-family: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: hsl(var(--hue) 22% 9%);
+      --panel: hsl(var(--hue) 20% 13%);
+      --ink: hsl(var(--hue) 20% 92%);
+      --muted: hsl(var(--hue) 10% 66%);
+      --line: hsl(var(--hue) 15% 24%);
+      --accent: hsl(var(--hue) 60% 62%);
+      --accent-ink: hsl(var(--hue) 40% 10%);
+      --bot: hsl(var(--hue) 18% 19%);
+      --flag-bg: #3a2f10;
+      --flag-ink: #ffd98a;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: hsl(var(--hue) 22% 9%);
+    --panel: hsl(var(--hue) 20% 13%);
+    --ink: hsl(var(--hue) 20% 92%);
+    --muted: hsl(var(--hue) 10% 66%);
+    --line: hsl(var(--hue) 15% 24%);
+    --accent: hsl(var(--hue) 60% 62%);
+    --accent-ink: hsl(var(--hue) 40% 10%);
+    --bot: hsl(var(--hue) 18% 19%);
+    --flag-bg: #3a2f10;
+    --flag-ink: #ffd98a;
+  }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: inherit; font-size: 15px; line-height: 1.5;
+    padding-inline: 16px; padding-block: 16px; box-sizing: border-box;
+    display: flex; justify-content: center;
+  }
+  .app {
+    width: 100%; max-width: 440px; height: 100%; max-height: 760px;
+    display: flex; flex-direction: column;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
+  }
+  .flag {
+    background: var(--flag-bg); color: var(--flag-ink);
+    font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+    padding: 8px 14px; text-align: center;
+  }
+  header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+  .avatar {
+    width: 38px; height: 38px; border-radius: 50%; flex: none;
+    background: var(--accent); color: var(--accent-ink);
+    display: grid; place-items: center; font-weight: 700;
+  }
+  header h1 { font-size: 16px; margin: 0; text-wrap: balance; }
+  header a { font-size: 13px; color: var(--muted); text-decoration: none; }
+  header a:hover { text-decoration: underline; }
+  .log { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .msg { max-width: 85%; padding: 9px 13px; border-radius: 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .bot { background: var(--bot); align-self: flex-start; border-bottom-left-radius: 4px; }
+  .me { background: var(--accent); color: var(--accent-ink); align-self: flex-end; border-bottom-right-radius: 4px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 16px 12px; }
+  .chips button {
+    font: inherit; font-size: 13px; cursor: pointer;
+    background: transparent; color: var(--accent);
+    border: 1px solid var(--accent); border-radius: 999px; padding: 5px 11px;
+  }
+  .chips button:hover { background: var(--bot); }
+  form { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--line); }
+  input {
+    flex: 1; min-width: 0; font: inherit; color: var(--ink); background: var(--bg);
+    border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px;
+  }
+  form button {
+    font: inherit; font-weight: 600; cursor: pointer;
+    background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 10px; padding: 0 16px;
+  }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .note { font-size: 12px; color: var(--muted); text-align: center; padding: 0 16px 12px; margin: 0; }
+</style>
+
+<div class="app">
+  <div class="flag">EXAMPLE · demo chatbot, not official</div>
+  <header>
+    <div class="avatar" id="avatar"></div>
+    <div>
+      <h1 id="name"></h1>
+      <a id="site" target="_blank" rel="noopener"></a>
+    </div>
+  </header>
+  <div class="log" id="log" aria-live="polite"></div>
+  <div class="chips" id="chips"></div>
+  <form id="form">
+    <input id="q" autocomplete="off" placeholder="Type a question…" aria-label="Your question">
+    <button type="submit">Send</button>
+  </form>
+  <p class="note">Keyword-based example built from public info on the company's website.</p>
+</div>
+
+<script>
+const DEMO = {"name":"Pieneläinklinikka Tuikku","site":"https://www.elainklinikkatuikku.fi/","hue":175,"intro":"Hi! I'm the example assistant of Pieneläinklinikka Tuikku, an independent small animal clinic in Turku. Ask me about opening hours, booking, prices, our services or how to find us.","chips":["What are your opening hours?","How do I book an appointment?","Where are you and is there parking?","How much is a vaccination?","What is your cancellation policy?","Which animals do you treat?"],"kb":[[[" cancel"," no show"," missed"],"Please cancel at least 24 hours in advance by phone (044 983 4603) or email (info@elainklinikkatuikku.fi). For an appointment that is not cancelled, we charge half of the price of the booked procedure."],[[" hour"," open"," close"," when"],"Our opening hours:\nMon–Tue 8–17\nWed–Thu 8–20\nFri 8–16"],[[" acupuncture"," pain"],"We offer acupuncture and pain management. Our veterinarian Noora Holk is a certified veterinary medical acupuncturist (2015). Acupuncture appointments are booked by phone: 044 983 4603."],[[" book"," appointment"," reserve"," reservation"],"You can book online through our booking system (linked on elainklinikkatuikku.fi), or call us at 044 983 4603. Acupuncture appointments are booked by phone."],[[" where"," address"," location"," find"," park"," parking"," directions"],"We're at Ilmarisenkatu 18, 20520 Turku. Drive in from the Tierankatu side; the main entrance is on the inner courtyard side, where there are free customer parking spaces."],[[" vaccin"," vaccine"," rabies"," jab"],"Vaccination prices:\nCat triple vaccine €60\nCat triple + rabies €70\nDog quadruple / kennel cough €60\nDog quadruple + rabies €70\nHerpes vaccine €70\nPrices include VAT 25.5%. An office fee of €16 is added to most services."],[[" spay"," neuter"," castrat"," steriliz"],"Spaying: cats €192, dogs from €400 (under 5 kg) to €685 (over 55 kg).\nCastration: cats €100, dogs from €320 (under 5 kg) to €480 (over 55 kg).\nChemical castration: €183 (6 months), €277 (12 months).\nPrices include VAT 25.5%. An office fee of €16 is added to most services."],[[" dental"," teeth"," tooth"],"Dental cleaning: cat €250 (with full mouth X-ray €350), dog €300 (with full mouth X-ray €425). Deciduous tooth extraction €280. Prices include VAT 25.5%."],[[" chip"," microchip"," passport"," travel"],"Microchipping €60 (€35 together with another visit). EU pet passport €80 (€40 together with other procedures)."],[[" nail"," claw"," groom"," trim"," ear"],"Nurse visits include nail trim €15, ear cleaning €30, paw care €35, anal gland expression €25 and fur trimming from €75."],[[" price"," cost"," how much"," fee"," consultation"," visit"],"Consultations: 15 min €60, 30 min €94, 45 min €138, 60 min €182. Adult health check incl. blood tests €262. Prices include VAT 25.5%, and an office fee of €16 is added to most services. The full price list is on our website."],[[" pay"," payment"," card"," cash"," financ"],"You can pay by cash or card. Financing is also available through Resurs Bank."],[[" animal"," species"," rabbit"," rodent"," dog"," cat"," pet"],"We provide basic healthcare for dogs, cats, rabbits and rodents. Surgical procedures are done for dogs and cats."],[[" surgery"," operation"," surgeon"],"We perform surgery for dogs and cats, including orthopedic and minimally invasive surgery. Our surgeon Janne Nurmi is a DVM and docent in surgery."],[[" vet"," veterinarian"," staff"," team"," doctor"],"Our veterinarians are Lynn Bäckström, Noora Holk, Janne Nurmi, Tuuli Viitamaa and Valtteri Viloma, supported by a team of clinic animal nurses."],[[" swedish"," svenska"],"Yes, our veterinarian Lynn Bäckström provides service in Swedish."],[[" food"," royal canin"," shop"],"We sell pet products and food, including Royal Canin."],[[" phone"," call"," email"," contact"],"Phone: 044 983 4603\nEmail: info@elainklinikkatuikku.fi\nAddress: Ilmarisenkatu 18, 20520 Turku"]],"contact":"info@elainklinikkatuikku.fi or 044 983 4603"};
+
+document.documentElement.style.setProperty("--hue", DEMO.hue ?? 200);
+document.getElementById("name").textContent = DEMO.name;
+document.getElementById("avatar").textContent = (DEMO.name || "?").trim().charAt(0).toUpperCase();
+const siteLink = document.getElementById("site");
+siteLink.href = DEMO.site;
+siteLink.textContent = DEMO.site.replace(/^https?:\/\//, "").replace(/\/$/, "");
+
+const log = document.getElementById("log");
+function say(text, who) {
+  const el = document.createElement("div");
+  el.className = "msg " + who;
+  el.textContent = text;
+  log.appendChild(el);
+  log.scrollTop = log.scrollHeight;
+}
+
+function answer(question) {
+  const text = " " + question.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ") + " ";
+  for (const [keys, reply] of DEMO.kb) {
+    if (keys.some(k => text.includes(k.toLowerCase()))) return reply;
+  }
+  return "I don't have that answer in this example. You can contact the team directly: " + DEMO.contact;
+}
+
+function ask(question) {
+  question = question.trim();
+  if (!question) return;
+  say(question, "me");
+  setTimeout(() => say(answer(question), "bot"), 350);
+}
+
+const chips = document.getElementById("chips");
+for (const c of DEMO.chips) {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.textContent = c;
+  b.addEventListener("click", () => ask(c));
+  chips.appendChild(b);
+}
+
+document.getElementById("form").addEventListener("submit", e => {
+  e.preventDefault();
+  const q = document.getElementById("q");
+  ask(q.value);
+  q.value = "";
+});
+
+say(DEMO.intro, "bot");
+</script>
+
+</body>
+</html>

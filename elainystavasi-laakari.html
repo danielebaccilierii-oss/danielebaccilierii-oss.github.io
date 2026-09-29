@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Eläinystäväsi Lääkäri Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --hue: 200;
+    --bg: hsl(var(--hue) 25% 96%);
+    --panel: #ffffff;
+    --ink: hsl(var(--hue) 30% 12%);
+    --muted: hsl(var(--hue) 12% 42%);
+    --line: hsl(var(--hue) 18% 88%);
+    --accent: hsl(var(--hue) 62% 38%);
+    --accent-ink: #ffffff;
+    --bot: hsl(var(--hue) 30% 94%);
+    --flag-bg: #fff4d6;
+    --flag-ink: #6b4a00;
+    font-family: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: hsl(var(--hue) 22% 9%);
+      --panel: hsl(var(--hue) 20% 13%);
+      --ink: hsl(var(--hue) 20% 92%);
+      --muted: hsl(var(--hue) 10% 66%);
+      --line: hsl(var(--hue) 15% 24%);
+      --accent: hsl(var(--hue) 60% 62%);
+      --accent-ink: hsl(var(--hue) 40% 10%);
+      --bot: hsl(var(--hue) 18% 19%);
+      --flag-bg: #3a2f10;
+      --flag-ink: #ffd98a;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: hsl(var(--hue) 22% 9%);
+    --panel: hsl(var(--hue) 20% 13%);
+    --ink: hsl(var(--hue) 20% 92%);
+    --muted: hsl(var(--hue) 10% 66%);
+    --line: hsl(var(--hue) 15% 24%);
+    --accent: hsl(var(--hue) 60% 62%);
+    --accent-ink: hsl(var(--hue) 40% 10%);
+    --bot: hsl(var(--hue) 18% 19%);
+    --flag-bg: #3a2f10;
+    --flag-ink: #ffd98a;
+  }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: inherit; font-size: 15px; line-height: 1.5;
+    padding-inline: 16px; padding-block: 16px; box-sizing: border-box;
+    display: flex; justify-content: center;
+  }
+  .app {
+    width: 100%; max-width: 440px; height: 100%; max-height: 760px;
+    display: flex; flex-direction: column;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
+  }
+  .flag {
+    background: var(--flag-bg); color: var(--flag-ink);
+    font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+    padding: 8px 14px; text-align: center;
+  }
+  header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+  .avatar {
+    width: 38px; height: 38px; border-radius: 50%; flex: none;
+    background: var(--accent); color: var(--accent-ink);
+    display: grid; place-items: center; font-weight: 700;
+  }
+  header h1 { font-size: 16px; margin: 0; text-wrap: balance; }
+  header a { font-size: 13px; color: var(--muted); text-decoration: none; }
+  header a:hover { text-decoration: underline; }
+  .log { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .msg { max-width: 85%; padding: 9px 13px; border-radius: 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .bot { background: var(--bot); align-self: flex-start; border-bottom-left-radius: 4px; }
+  .me { background: var(--accent); color: var(--accent-ink); align-self: flex-end; border-bottom-right-radius: 4px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 16px 12px; }
+  .chips button {
+    font: inherit; font-size: 13px; cursor: pointer;
+    background: transparent; color: var(--accent);
+    border: 1px solid var(--accent); border-radius: 999px; padding: 5px 11px;
+  }
+  .chips button:hover { background: var(--bot); }
+  form { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--line); }
+  input {
+    flex: 1; min-width: 0; font: inherit; color: var(--ink); background: var(--bg);
+    border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px;
+  }
+  form button {
+    font: inherit; font-weight: 600; cursor: pointer;
+    background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 10px; padding: 0 16px;
+  }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .note { font-size: 12px; color: var(--muted); text-align: center; padding: 0 16px 12px; margin: 0; }
+</style>
+
+<div class="app">
+  <div class="flag">EXAMPLE · demo chatbot, not official</div>
+  <header>
+    <div class="avatar" id="avatar"></div>
+    <div>
+      <h1 id="name"></h1>
+      <a id="site" target="_blank" rel="noopener"></a>
+    </div>
+  </header>
+  <div class="log" id="log" aria-live="polite"></div>
+  <div class="chips" id="chips"></div>
+  <form id="form">
+    <input id="q" autocomplete="off" placeholder="Type a question…" aria-label="Your question">
+    <button type="submit">Send</button>
+  </form>
+  <p class="note">Keyword-based example built from public info on the company's website.</p>
+</div>
+
+<script>
+const DEMO = {"name":"Eläinystäväsi Lääkäri","site":"https://elainystavasilaakari.fi/","hue":165,"intro":"Hi! I'm the example assistant for Eläinystäväsi Lääkäri, the veterinary clinic for dogs and cats in Tampere. Ask me about opening hours, booking, prices, services or payment.","chips":["What are your opening hours?","How do I book an appointment?","How much does a vaccination cost?","Do you treat cats?","Can I pay with insurance?","Where are you located?"],"kb":[[[" hours"," open"," opening"," closing"," saturday"," weekend"],"The clinic is open Mon–Fri 8–19 and Sat 8–16. The phone line (010 320 9130) answers Mon–Fri 8–18 and Sat 9–13."],[[" cancel"," no show"," reschedule"],"Cancellations are made by phone only (010 320 9130): at least 24 hours before a regular appointment, and 48 hours before surgery or dental procedures. Late cancellations or no-shows are charged 50% of the service cost (minimum 66 €)."],[[" book"," appointment"," reserve"," reservation"," online"],"You can book online through the booking link on the clinic's website — online booking is available around the clock. You can also book by phone at 010 320 9130 (Mon–Fri 8–18, Sat 9–13)."],[[" price"," prices"," cost"," how much"," fee"," expensive"],"Some example prices from the clinic's price list:\n• Health check + dog core and rabies vaccine: 88 €\n• Health check + dog core vaccine: 81 €\n• Cat castration: 159 €\n• Physiotherapy 30 min: 54 €\nThe full price list (Hinnasto) is on the website."],[[" vaccin"," rabies"," health check"," checkup"," check up"],"The clinic recommends checking your pet's health yearly and offers health checks with vaccinations. For example, a health check with dog core and rabies vaccines is 88 €. You can book online or call 010 320 9130."],[[" pay"," payment"," card"," cash"," insurance"," insured"," installment"," instalment"," financing"," agria"," lähitapiola"," lahitapiola"],"You can pay with the most common bank and credit cards (not American Express or Diners Club) or cash. Resurs Bank's pet clinic account allows paying later, with up to 12 months interest-free. Direct insurance billing is available with LähiTapiola and Agria."],[[" address"," where"," located"," location"," parking"," park"," directions"],"You'll find us at Kornetinkatu 6, 33300 Tampere. There is plenty of free parking for customers."],[[" service"," services"," surgery"," operation"," x ray"," xray"," ultrasound"," dental"," teeth"," tooth"," physio"," laboratory"," lab"," blood test"," endoscop"," lameness"," limping"," castrat"," neuter"," spay"," food"," diet"],"Our services include health checks and vaccinations, digital X-ray, laboratory tests, ultrasound, lameness exams, orthopaedic and soft-tissue surgery (e.g. castrations), endoscopy and endoscopic surgery, dental care with full-mouth X-rays, physiotherapy with a treadmill, and therapeutic foods and supplements."],[[" cat"," cats"," dog"," dogs"," animal"," animals"," species"," pet"," pets"],"We treat dogs and cats. The clinic is a gold-level Cat Friendly Clinic certified by International Cat Care."],[[" since"," history"," about"," experience"," years"],"Caring for pets has been our calling since 1999. The clinic is located in Tampere at Kornetinkatu 6."],[[" phone"," call"," email"," contact"," number"],"Phone: 010 320 9130 (Mon–Fri 8–18, Sat 9–13). Email: hoitajat@elainystavasilaakari.fi for general questions and feedback. Contact page: https://elainystavasilaakari.fi/yhteystiedot/"]],"contact":"https://elainystavasilaakari.fi/yhteystiedot/ · phone 010 320 9130 · hoitajat@elainystavasilaakari.fi"};
+
+document.documentElement.style.setProperty("--hue", DEMO.hue ?? 200);
+document.getElementById("name").textContent = DEMO.name;
+document.getElementById("avatar").textContent = (DEMO.name || "?").trim().charAt(0).toUpperCase();
+const siteLink = document.getElementById("site");
+siteLink.href = DEMO.site;
+siteLink.textContent = DEMO.site.replace(/^https?:\/\//, "").replace(/\/$/, "");
+
+const log = document.getElementById("log");
+function say(text, who) {
+  const el = document.createElement("div");
+  el.className = "msg " + who;
+  el.textContent = text;
+  log.appendChild(el);
+  log.scrollTop = log.scrollHeight;
+}
+
+function answer(question) {
+  const text = " " + question.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ") + " ";
+  for (const [keys, reply] of DEMO.kb) {
+    if (keys.some(k => text.includes(k.toLowerCase()))) return reply;
+  }
+  return "I don't have that answer in this example. You can contact the team directly: " + DEMO.contact;
+}
+
+function ask(question) {
+  question = question.trim();
+  if (!question) return;
+  say(question, "me");
+  setTimeout(() => say(answer(question), "bot"), 350);
+}
+
+const chips = document.getElementById("chips");
+for (const c of DEMO.chips) {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.textContent = c;
+  b.addEventListener("click", () => ask(c));
+  chips.appendChild(b);
+}
+
+document.getElementById("form").addEventListener("submit", e => {
+  e.preventDefault();
+  const q = document.getElementById("q");
+  ask(q.value);
+  q.value = "";
+});
+
+say(DEMO.intro, "bot");
+</script>
+
+</body>
+</html>

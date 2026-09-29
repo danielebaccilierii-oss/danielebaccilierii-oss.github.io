@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>KorjaamoKamut Oy Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --hue: 200;
+    --bg: hsl(var(--hue) 25% 96%);
+    --panel: #ffffff;
+    --ink: hsl(var(--hue) 30% 12%);
+    --muted: hsl(var(--hue) 12% 42%);
+    --line: hsl(var(--hue) 18% 88%);
+    --accent: hsl(var(--hue) 62% 38%);
+    --accent-ink: #ffffff;
+    --bot: hsl(var(--hue) 30% 94%);
+    --flag-bg: #fff4d6;
+    --flag-ink: #6b4a00;
+    font-family: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: hsl(var(--hue) 22% 9%);
+      --panel: hsl(var(--hue) 20% 13%);
+      --ink: hsl(var(--hue) 20% 92%);
+      --muted: hsl(var(--hue) 10% 66%);
+      --line: hsl(var(--hue) 15% 24%);
+      --accent: hsl(var(--hue) 60% 62%);
+      --accent-ink: hsl(var(--hue) 40% 10%);
+      --bot: hsl(var(--hue) 18% 19%);
+      --flag-bg: #3a2f10;
+      --flag-ink: #ffd98a;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: hsl(var(--hue) 22% 9%);
+    --panel: hsl(var(--hue) 20% 13%);
+    --ink: hsl(var(--hue) 20% 92%);
+    --muted: hsl(var(--hue) 10% 66%);
+    --line: hsl(var(--hue) 15% 24%);
+    --accent: hsl(var(--hue) 60% 62%);
+    --accent-ink: hsl(var(--hue) 40% 10%);
+    --bot: hsl(var(--hue) 18% 19%);
+    --flag-bg: #3a2f10;
+    --flag-ink: #ffd98a;
+  }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: inherit; font-size: 15px; line-height: 1.5;
+    padding-inline: 16px; padding-block: 16px; box-sizing: border-box;
+    display: flex; justify-content: center;
+  }
+  .app {
+    width: 100%; max-width: 440px; height: 100%; max-height: 760px;
+    display: flex; flex-direction: column;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
+  }
+  .flag {
+    background: var(--flag-bg); color: var(--flag-ink);
+    font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+    padding: 8px 14px; text-align: center;
+  }
+  header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+  .avatar {
+    width: 38px; height: 38px; border-radius: 50%; flex: none;
+    background: var(--accent); color: var(--accent-ink);
+    display: grid; place-items: center; font-weight: 700;
+  }
+  header h1 { font-size: 16px; margin: 0; text-wrap: balance; }
+  header a { font-size: 13px; color: var(--muted); text-decoration: none; }
+  header a:hover { text-decoration: underline; }
+  .log { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .msg { max-width: 85%; padding: 9px 13px; border-radius: 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .bot { background: var(--bot); align-self: flex-start; border-bottom-left-radius: 4px; }
+  .me { background: var(--accent); color: var(--accent-ink); align-self: flex-end; border-bottom-right-radius: 4px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 16px 12px; }
+  .chips button {
+    font: inherit; font-size: 13px; cursor: pointer;
+    background: transparent; color: var(--accent);
+    border: 1px solid var(--accent); border-radius: 999px; padding: 5px 11px;
+  }
+  .chips button:hover { background: var(--bot); }
+  form { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--line); }
+  input {
+    flex: 1; min-width: 0; font: inherit; color: var(--ink); background: var(--bg);
+    border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px;
+  }
+  form button {
+    font: inherit; font-weight: 600; cursor: pointer;
+    background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 10px; padding: 0 16px;
+  }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .note { font-size: 12px; color: var(--muted); text-align: center; padding: 0 16px 12px; margin: 0; }
+</style>
+
+<div class="app">
+  <div class="flag">EXAMPLE · demo chatbot, not official</div>
+  <header>
+    <div class="avatar" id="avatar"></div>
+    <div>
+      <h1 id="name"></h1>
+      <a id="site" target="_blank" rel="noopener"></a>
+    </div>
+  </header>
+  <div class="log" id="log" aria-live="polite"></div>
+  <div class="chips" id="chips"></div>
+  <form id="form">
+    <input id="q" autocomplete="off" placeholder="Type a question…" aria-label="Your question">
+    <button type="submit">Send</button>
+  </form>
+  <p class="note">Keyword-based example built from public info on the company's website.</p>
+</div>
+
+<script>
+const DEMO = {"name":"KorjaamoKamut Oy","site":"https://korjaamokamut.fi/","hue":22,"intro":"Hi! I'm the KorjaamoKamut assistant. Ask me about our car services, indicative prices, opening hours or how to book a time at our workshop in Kuopio.","chips":["What are your opening hours?","Where are you located?","How much is an annual service?","How much does an oil change cost?","Do you service air conditioning?","How do I book an appointment?"],"kb":[[[" air con"," aircon"," ac "," ilmastointi"," refrigerant"," disinfect"],"Yes, we service air conditioning. Indicative prices: R134a systems (typically used until 2017) 79 €, R1234YF systems (standard from 2017) 95 €, system disinfection 20 €. Prices on our price list are indicative, not binding."],[[" brake"," jarru"],"We do brake and suspension work. Indicative prices (per axle, front or rear, parts billed separately): brake disc replacement 40 €, brake pad replacement 60 €. Brake fluid change 60 €. Other brake work 85 €/h."],[[" diagnos"," fault"," error code"," check engine"," warning light"," clutch"," timing belt"," cambelt"],"We also do other work case by case, for example fault diagnostics, timing belt service and clutch repairs. Reading and resetting fault codes costs 30 €; in-depth diagnostics from 85 €/h."],[[" transmission"," gearbox"," drivetrain"," automatic"," manual"],"We change gearbox and drivetrain oils, and automatic transmissions can also be flushed. A manual gearbox oil change for passenger cars is 80 €, including the work and oil that meets the manufacturer's specification."],[[" annual"," yearly"," maintenance"," vuosihuolto"," scheduled"],"Annual service starts from 145 €: small petrol cars 145–195 €, larger petrol engines 165–220 €, diesel cars 175–240 €, vans 195–260 €. It includes engine oil and oil filter change, checks of brakes, fluid levels, lights and tyre condition, and our own annual service report. Prices are indicative."],[[" oil"," öljy"," filter"," quick service"," pikahuolto"],"Oil change prices (indicative, from): VAG (Volkswagen, Audi, Skoda, Seat) from 85 €, BMW from 99 €, Mercedes-Benz from 120 €. The price always includes engine oil, oil filter, labour and a service book entry. Quick oil and filter changes can even be done without an appointment when our schedule allows."],[[" fleet"," company car"," business"," corporate"],"Yes, we offer fleet maintenance for business customers: flexible and preventive service for your company's vehicles. Contact us at info@korjaamokamut.fi or 050 370 4965."],[[" hourly"," per hour"," labour"," labor"," rate"],"Repair and service work outside the price list is charged at 85 €/h."],[[" hour"," open"," close"," weekend"," saturday"," sunday"," when "],"We're open Monday to Friday 8–16. Other times by arrangement."],[[" where"," address"," locat"," kuopio"," find you"],"You'll find us at Teräskatu 10, 70150 Kuopio."],[[" book"," appointment"," reserve"," reservation"," walk in"],"You can book a time by phone at 050 370 4965, by email at info@korjaamokamut.fi, or through the contact form on our website. Quick oil and filter changes are possible even without an appointment when our schedule allows."],[[" contact"," phone"," call"," email"," number"],"Phone: 050 370 4965. Email: info@korjaamokamut.fi. Address: Teräskatu 10, 70150 Kuopio."],[[" price"," cost"," how much"," expensive"," cheap"],"Our price list includes annual service (from 145 €), oil changes (from 85 €), air conditioning service (from 79 €), brake work and diagnostics. Other work is 85 €/h. Prices are indicative. Ask me about a specific service!"],[[" who "," about"," team"," founder"," experience"],"We're former classmates who graduated as vehicle mechanics in 2008–2011 and have worked in the car trade ever since. Our goal is to make motoring easier: flexible, fast service, clear prices told upfront, smooth communication and careful work."],[[" service"," repair"," fix"," what do you do"," offer"],"Our services: scheduled and annual maintenance, brake and suspension work, air conditioning service, fleet maintenance for businesses, quick service (oil and filter changes), transmission and drivetrain oil changes, and other work such as fault diagnostics, timing belt service and clutch repairs."]],"contact":"info@korjaamokamut.fi or 050 370 4965"};
+
+document.documentElement.style.setProperty("--hue", DEMO.hue ?? 200);
+document.getElementById("name").textContent = DEMO.name;
+document.getElementById("avatar").textContent = (DEMO.name || "?").trim().charAt(0).toUpperCase();
+const siteLink = document.getElementById("site");
+siteLink.href = DEMO.site;
+siteLink.textContent = DEMO.site.replace(/^https?:\/\//, "").replace(/\/$/, "");
+
+const log = document.getElementById("log");
+function say(text, who) {
+  const el = document.createElement("div");
+  el.className = "msg " + who;
+  el.textContent = text;
+  log.appendChild(el);
+  log.scrollTop = log.scrollHeight;
+}
+
+function answer(question) {
+  const text = " " + question.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ") + " ";
+  for (const [keys, reply] of DEMO.kb) {
+    if (keys.some(k => text.includes(k.toLowerCase()))) return reply;
+  }
+  return "I don't have that answer in this example. You can contact the team directly: " + DEMO.contact;
+}
+
+function ask(question) {
+  question = question.trim();
+  if (!question) return;
+  say(question, "me");
+  setTimeout(() => say(answer(question), "bot"), 350);
+}
+
+const chips = document.getElementById("chips");
+for (const c of DEMO.chips) {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.textContent = c;
+  b.addEventListener("click", () => ask(c));
+  chips.appendChild(b);
+}
+
+document.getElementById("form").addEventListener("submit", e => {
+  e.preventDefault();
+  const q = document.getElementById("q");
+  ask(q.value);
+  q.value = "";
+});
+
+say(DEMO.intro, "bot");
+</script>
+
+</body>
+</html>
