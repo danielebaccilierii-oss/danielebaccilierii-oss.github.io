@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}</style>
+<title>Lomamokkila Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --hue: 200;
+    --bg: hsl(var(--hue) 25% 96%);
+    --panel: #ffffff;
+    --ink: hsl(var(--hue) 30% 12%);
+    --muted: hsl(var(--hue) 12% 42%);
+    --line: hsl(var(--hue) 18% 88%);
+    --accent: hsl(var(--hue) 62% 38%);
+    --accent-ink: #ffffff;
+    --bot: hsl(var(--hue) 30% 94%);
+    --flag-bg: #fff4d6;
+    --flag-ink: #6b4a00;
+    font-family: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: hsl(var(--hue) 22% 9%);
+      --panel: hsl(var(--hue) 20% 13%);
+      --ink: hsl(var(--hue) 20% 92%);
+      --muted: hsl(var(--hue) 10% 66%);
+      --line: hsl(var(--hue) 15% 24%);
+      --accent: hsl(var(--hue) 60% 62%);
+      --accent-ink: hsl(var(--hue) 40% 10%);
+      --bot: hsl(var(--hue) 18% 19%);
+      --flag-bg: #3a2f10;
+      --flag-ink: #ffd98a;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: hsl(var(--hue) 22% 9%);
+    --panel: hsl(var(--hue) 20% 13%);
+    --ink: hsl(var(--hue) 20% 92%);
+    --muted: hsl(var(--hue) 10% 66%);
+    --line: hsl(var(--hue) 15% 24%);
+    --accent: hsl(var(--hue) 60% 62%);
+    --accent-ink: hsl(var(--hue) 40% 10%);
+    --bot: hsl(var(--hue) 18% 19%);
+    --flag-bg: #3a2f10;
+    --flag-ink: #ffd98a;
+  }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: inherit; font-size: 15px; line-height: 1.5;
+    padding-inline: 16px; padding-block: 16px; box-sizing: border-box;
+    display: flex; justify-content: center;
+  }
+  .app {
+    width: 100%; max-width: 440px; height: 100%; max-height: 760px;
+    display: flex; flex-direction: column;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
+  }
+  .flag {
+    background: var(--flag-bg); color: var(--flag-ink);
+    font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+    padding: 8px 14px; text-align: center;
+  }
+  header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+  .avatar {
+    width: 38px; height: 38px; border-radius: 50%; flex: none;
+    background: var(--accent); color: var(--accent-ink);
+    display: grid; place-items: center; font-weight: 700;
+  }
+  header h1 { font-size: 16px; margin: 0; text-wrap: balance; }
+  header a { font-size: 13px; color: var(--muted); text-decoration: none; }
+  header a:hover { text-decoration: underline; }
+  .log { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .msg { max-width: 85%; padding: 9px 13px; border-radius: 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .bot { background: var(--bot); align-self: flex-start; border-bottom-left-radius: 4px; }
+  .me { background: var(--accent); color: var(--accent-ink); align-self: flex-end; border-bottom-right-radius: 4px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 16px 12px; }
+  .chips button {
+    font: inherit; font-size: 13px; cursor: pointer;
+    background: transparent; color: var(--accent);
+    border: 1px solid var(--accent); border-radius: 999px; padding: 5px 11px;
+  }
+  .chips button:hover { background: var(--bot); }
+  form { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--line); }
+  input {
+    flex: 1; min-width: 0; font: inherit; color: var(--ink); background: var(--bg);
+    border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px;
+  }
+  form button {
+    font: inherit; font-weight: 600; cursor: pointer;
+    background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 10px; padding: 0 16px;
+  }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .note { font-size: 12px; color: var(--muted); text-align: center; padding: 0 16px 12px; margin: 0; }
+</style>
+
+</head>
+<body>
+<div class="app">
+  <div class="flag">EXAMPLE · demo chatbot, not official</div>
+  <header>
+    <div class="avatar" id="avatar"></div>
+    <div>
+      <h1 id="name"></h1>
+      <a id="site" target="_blank" rel="noopener"></a>
+    </div>
+  </header>
+  <div class="log" id="log" aria-live="polite"></div>
+  <div class="chips" id="chips"></div>
+  <form id="form">
+    <input id="q" autocomplete="off" placeholder="Type a question…" aria-label="Your question">
+    <button type="submit">Send</button>
+  </form>
+  <p class="note">Keyword-based example built from public info on the company's website.</p>
+</div>
+
+<script>
+const DEMO = {"name":"Lomamokkila","site":"https://www.lomamokkila.fi/","hue":140,"intro":"Hi! I'm the Lomamokkila assistant. Ask me about our B&B rooms, lakeside cottages, meals, activities or how to book.","chips":["Where are you located?","What rooms do you have?","Tell me about the cottages","Is breakfast included?","Do you serve dinner?","How can I book?"],"kb":[[[" where"," location"," located"," address"," directions"," find you"],"Lomamokkila is at Mikonkiventie 209, FI-57310 Savonlinna, about 12 km from Savonlinna. From Savonlinna towards Lappeenranta, turn onto Enonkoskentie (towards the airport), drive 7 km, then turn right onto Mikonkiventie and continue about 1 km."],[[" room"," rooms"," b b"," bnb"," guest house"," double"],"Our B&B rooms: 3 double rooms in the main building (adults only), 8 double rooms in the New Guest House and 8 in the Guest House, all with private bathroom, TV and Wi-Fi. Some rooms take an extra bed. In summer (10 June to 20 August) there are also 2 rooms with shared bathroom in the Holiday Building. Breakfast, linen and cleaning are included."],[[" cottage"," cottages"," cabin"," cabins"," mokki"," lakeside"],"We have lakeside cottages on Lake Saimaa. Year-round: Kallio, Mänty, Hiekka and Kallioniemi (up to 5 people, 2 bedrooms) and Honka (up to 8 people, 4 bedrooms). Summer only (10 June to 20 August): Koivu (2 people), Kaisla (4 people) and Poukama (2+2). Every cottage has its own beach, rowing boat and wood-heated sauna."],[[" breakfast"],"Breakfast is included in all room rates: homemade breads, rolls and pastries, farm eggs, berries and jams from local producers. Cottage guests can reserve breakfast separately."],[[" dinner"," eat"," food"," restaurant"," meal"],"In summer we serve dinner Tuesday to Saturday, €25 per person, with dishes like stew from our own Highland cattle. Dinner is at 6 pm (5 pm during the July opera season) and must be booked in advance. In July there is also an outdoor pancake bar."],[[" gluten"," allerg"," diet"," vegan"," vegetarian"],"Please tell us about allergies and special diets when you book. Gluten-free baked goods are prepared with special care, but we can't fully guarantee gluten-free as the kitchen is shared."],[[" book"," booking"," reserve"," reservation"," availability"],"You can book rooms and cottages directly in our online booking system at lomamokkila.fi/varaa, or call +358 15 523 117 or email info@lomamokkila.fi if you need help."],[[" sauna"],"Every cottage has its own wood-heated sauna. By the lake there are also a traditional smoke sauna and a warm sauna."],[[" boat"," canoe"," rowing"," fishing"," swim"," lake"," paddle"," sup"],"By Lake Saimaa you can go rowing, fishing and swimming. Every cottage comes with a rowing boat, and stand-up paddleboarding basics are available."],[[" activit"," tennis"," bike"," bicycle"," winter"," ski"," yoga"," do "],"In summer: tennis, volleyball, badminton, bicycle and tennis equipment rental, and bonfire spots. In winter: cross-country skiing trails and snowmobile routes nearby. Yoga weekends are offered with Yoga Saimaa at B&B Taipaleenniemi."],[[" nearby"," attraction"," castle"," olavinlinna"," opera"," national park"," punkaharju"],"Nearby you'll find Olavinlinna castle and the Opera Festival in Savonlinna, the Punkaharju ridge and Forest Museum, and Linnansaari and Kolovesi national parks."],[[" wifi"," wi fi"," internet"],"All B&B rooms in the main building and guest houses have Wi-Fi. In the summer Holiday Building, Wi-Fi is in the common areas."],[[" taipaleenniemi"],"B&B Taipaleenniemi is our second, historic waterfront location with rooms for guests aged 18 and over."],[[" contact"," phone"," email"," call"," whatsapp"],"Phone: +358 15 523 117. WhatsApp: +358 44 3679180. Email: info@lomamokkila.fi"],[[" language"," english"," german"," finnish"],"We serve guests in Finnish, English and German."]],"contact":"info@lomamokkila.fi"};
+
+document.documentElement.style.setProperty("--hue", DEMO.hue ?? 200);
+document.getElementById("name").textContent = DEMO.name;
+document.getElementById("avatar").textContent = (DEMO.name || "?").trim().charAt(0).toUpperCase();
+const siteLink = document.getElementById("site");
+siteLink.href = DEMO.site;
+siteLink.textContent = DEMO.site.replace(/^https?:\/\//, "").replace(/\/$/, "");
+
+const log = document.getElementById("log");
+function say(text, who) {
+  const el = document.createElement("div");
+  el.className = "msg " + who;
+  el.textContent = text;
+  log.appendChild(el);
+  log.scrollTop = log.scrollHeight;
+}
+
+function answer(question) {
+  const text = " " + question.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ") + " ";
+  for (const [keys, reply] of DEMO.kb) {
+    if (keys.some(k => text.includes(k.toLowerCase()))) return reply;
+  }
+  return "I don't have that answer in this example. You can contact the team directly: " + DEMO.contact;
+}
+
+function ask(question) {
+  question = question.trim();
+  if (!question) return;
+  say(question, "me");
+  setTimeout(() => say(answer(question), "bot"), 350);
+}
+
+const chips = document.getElementById("chips");
+for (const c of DEMO.chips) {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.textContent = c;
+  b.addEventListener("click", () => ask(c));
+  chips.appendChild(b);
+}
+
+document.getElementById("form").addEventListener("submit", e => {
+  e.preventDefault();
+  const q = document.getElementById("q");
+  ask(q.value);
+  q.value = "";
+});
+
+say(DEMO.intro, "bot");
+</script>
+</body>
+</html>
