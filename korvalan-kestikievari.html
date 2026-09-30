@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}</style>
+<title>Korvalan Kestikievari Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --hue: 200;
+    --bg: hsl(var(--hue) 25% 96%);
+    --panel: #ffffff;
+    --ink: hsl(var(--hue) 30% 12%);
+    --muted: hsl(var(--hue) 12% 42%);
+    --line: hsl(var(--hue) 18% 88%);
+    --accent: hsl(var(--hue) 62% 38%);
+    --accent-ink: #ffffff;
+    --bot: hsl(var(--hue) 30% 94%);
+    --flag-bg: #fff4d6;
+    --flag-ink: #6b4a00;
+    font-family: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: hsl(var(--hue) 22% 9%);
+      --panel: hsl(var(--hue) 20% 13%);
+      --ink: hsl(var(--hue) 20% 92%);
+      --muted: hsl(var(--hue) 10% 66%);
+      --line: hsl(var(--hue) 15% 24%);
+      --accent: hsl(var(--hue) 60% 62%);
+      --accent-ink: hsl(var(--hue) 40% 10%);
+      --bot: hsl(var(--hue) 18% 19%);
+      --flag-bg: #3a2f10;
+      --flag-ink: #ffd98a;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: hsl(var(--hue) 22% 9%);
+    --panel: hsl(var(--hue) 20% 13%);
+    --ink: hsl(var(--hue) 20% 92%);
+    --muted: hsl(var(--hue) 10% 66%);
+    --line: hsl(var(--hue) 15% 24%);
+    --accent: hsl(var(--hue) 60% 62%);
+    --accent-ink: hsl(var(--hue) 40% 10%);
+    --bot: hsl(var(--hue) 18% 19%);
+    --flag-bg: #3a2f10;
+    --flag-ink: #ffd98a;
+  }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: inherit; font-size: 15px; line-height: 1.5;
+    padding-inline: 16px; padding-block: 16px; box-sizing: border-box;
+    display: flex; justify-content: center;
+  }
+  .app {
+    width: 100%; max-width: 440px; height: 100%; max-height: 760px;
+    display: flex; flex-direction: column;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
+  }
+  .flag {
+    background: var(--flag-bg); color: var(--flag-ink);
+    font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+    padding: 8px 14px; text-align: center;
+  }
+  header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+  .avatar {
+    width: 38px; height: 38px; border-radius: 50%; flex: none;
+    background: var(--accent); color: var(--accent-ink);
+    display: grid; place-items: center; font-weight: 700;
+  }
+  header h1 { font-size: 16px; margin: 0; text-wrap: balance; }
+  header a { font-size: 13px; color: var(--muted); text-decoration: none; }
+  header a:hover { text-decoration: underline; }
+  .log { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .msg { max-width: 85%; padding: 9px 13px; border-radius: 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .bot { background: var(--bot); align-self: flex-start; border-bottom-left-radius: 4px; }
+  .me { background: var(--accent); color: var(--accent-ink); align-self: flex-end; border-bottom-right-radius: 4px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 16px 12px; }
+  .chips button {
+    font: inherit; font-size: 13px; cursor: pointer;
+    background: transparent; color: var(--accent);
+    border: 1px solid var(--accent); border-radius: 999px; padding: 5px 11px;
+  }
+  .chips button:hover { background: var(--bot); }
+  form { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--line); }
+  input {
+    flex: 1; min-width: 0; font: inherit; color: var(--ink); background: var(--bg);
+    border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px;
+  }
+  form button {
+    font: inherit; font-weight: 600; cursor: pointer;
+    background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 10px; padding: 0 16px;
+  }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .note { font-size: 12px; color: var(--muted); text-align: center; padding: 0 16px 12px; margin: 0; }
+</style>
+
+</head>
+<body>
+<div class="app">
+  <div class="flag">EXAMPLE · demo chatbot, not official</div>
+  <header>
+    <div class="avatar" id="avatar"></div>
+    <div>
+      <h1 id="name"></h1>
+      <a id="site" target="_blank" rel="noopener"></a>
+    </div>
+  </header>
+  <div class="log" id="log" aria-live="polite"></div>
+  <div class="chips" id="chips"></div>
+  <form id="form">
+    <input id="q" autocomplete="off" placeholder="Type a question…" aria-label="Your question">
+    <button type="submit">Send</button>
+  </form>
+  <p class="note">Keyword-based example built from public info on the company's website.</p>
+</div>
+
+<script>
+const DEMO = {"name":"Korvalan Kestikievari","site":"https://www.korvala.com/","hue":150,"intro":"Hi! I'm the example assistant for Korvalan Kestikievari, Lapland's oldest tourism business (since 1889), in Tiainen. Ask me about log cabins, husky tours, saunas, the Northern Lights or winter activities.","chips":["How do I book a cabin?","What cabins do you have?","When are husky tours?","Sauna prices?","Can we see the Northern Lights?","Are pets allowed?"],"kb":[[[" book a cabin"," booking com"," reserve"," reservation"," availability"],"All cabin availability is on Booking.com, and cabin reservations cannot be made directly with Korvala. Husky tours and saunas are booked online on korvala.com."],[[" pet"," pets"," dog allowed"," dogs allowed"],"Pets are not permitted in the accommodation."],[[" husky"," huskies"," sled"," sledding"," dog"],"Korvala runs husky tours with pure pedigree Siberian Huskies. You learn to drive your own team in small groups of 6-8 participants, in pairs, and the tour includes a kennel tour and warm drinks. Tours run through the winter (November/December and March/April depend on snow). There are no tours on Wednesdays and Sundays, the dogs' rest days. Book early online or by email: no advance payment, you pay on arrival."],[[" sauna"," saunas"," hot tub"," mustikka"," puolukka"],"Two lakeside saunas, open Mon, Tue, Thu, Fri and Sat evenings, booked online:\n- Mustikka (floating, wood-fired, lake-view window): 90 min, 60 EUR/person, slots 16:00-17:30 and 18:00-19:30. Hot tub +30 EUR/person.\n- Puolukka (traditional, good for families, shallow swimming area): 50 min, 20 EUR adult / 10 EUR child, max 6 people, slots at 16:00, 17:00 and 18:00.\nBoth include towels, a soft drink, swimming and the after-sauna lounge. Extra towel 5 EUR."],[[" aurora"," northern lights"," northern light"," lights"],"Korvala is at 66°53'N, by a lake with very little light pollution. The aurora can be seen from the garden and lake right in front of the cabins, from autumn through spring, strongest around the equinoxes and most common around midnight. On clear nights there's no need to book an aurora tour elsewhere."],[[" cabin"," cabins"," room"," rooms"," accommodation"," stay"," sleep"],"Log cabins by the lake:\n- Grey cabins (3): for 2 people, queen-size double bed.\n- Red cabins (6): up to 4 people, living room with TV and fireplace, bunk beds in an alcove.\n- Large cabin (1): 6 people, double bedroom + 4 bunk beds, stone fireplace, own sauna.\nAll have a shower/WC and a kitchenette. Bookings via Booking.com."],[[" linen"," sheets"," towel"," towels"," bedding"],"Linen rental: sheets 13 EUR per person per stay, towels 7 EUR per person per stay."],[[" wifi"," wi fi"," internet"],"Free WiFi in the restaurant, and 5G coverage elsewhere."],[[" card"," cards"," pay"," payment"," amex"," american express"],"Major credit cards are accepted, except American Express and Diners Club. Husky tours are paid on arrival."],[[" restaurant"," food"," eat"," dinner"," lunch"," breakfast"," meal"],"Korvala has a restaurant known for traditional food, serving guests since the inn opened in 1889."],[[" ski"," skiing"," snowshoe"," snowshoeing"," toboggan"," skating"," ice fishing"," activities"," activity"],"Included with your stay: cross-country skiing, snowshoeing, tobogganing, ice-skating on natural ice and ice-fishing (book the lesson in advance). Snowmobile tours, reindeer farm visits and horse-drawn sleigh rides are available through external providers - snowmobiles are ideal on Wednesdays and Sundays when the huskies rest."],[[" snowmobile"," reindeer"," horse"],"Snowmobile tours, reindeer farm experiences and horse-drawn sleigh rides are booked through external providers. Snowmobiling is a good option on Wednesdays and Sundays, when the huskies rest."],[[" where"," address"," location"," located"],"Korvalan Kestikievari, Sodankyläntie 5901, 97540 Tiainen, Finland."],[[" history"," old"," 1889"," family"],"Established in 1889, first as a roadside inn and then a kestikievari, Korvala is Lapland's oldest tourism business, run today by the third and fourth generation of the family."],[[" contact"," email"," phone"," call"],"Email korvalan.kestikievari@co.inet.fi or call +358 407 229 515."]],"contact":"korvalan.kestikievari@co.inet.fi"};
+
+document.documentElement.style.setProperty("--hue", DEMO.hue ?? 200);
+document.getElementById("name").textContent = DEMO.name;
+document.getElementById("avatar").textContent = (DEMO.name || "?").trim().charAt(0).toUpperCase();
+const siteLink = document.getElementById("site");
+siteLink.href = DEMO.site;
+siteLink.textContent = DEMO.site.replace(/^https?:\/\//, "").replace(/\/$/, "");
+
+const log = document.getElementById("log");
+function say(text, who) {
+  const el = document.createElement("div");
+  el.className = "msg " + who;
+  el.textContent = text;
+  log.appendChild(el);
+  log.scrollTop = log.scrollHeight;
+}
+
+function answer(question) {
+  const text = " " + question.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ") + " ";
+  for (const [keys, reply] of DEMO.kb) {
+    if (keys.some(k => text.includes(k.toLowerCase()))) return reply;
+  }
+  return "I don't have that answer in this example. You can contact the team directly: " + DEMO.contact;
+}
+
+function ask(question) {
+  question = question.trim();
+  if (!question) return;
+  say(question, "me");
+  setTimeout(() => say(answer(question), "bot"), 350);
+}
+
+const chips = document.getElementById("chips");
+for (const c of DEMO.chips) {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.textContent = c;
+  b.addEventListener("click", () => ask(c));
+  chips.appendChild(b);
+}
+
+document.getElementById("form").addEventListener("submit", e => {
+  e.preventDefault();
+  const q = document.getElementById("q");
+  ask(q.value);
+  q.value = "";
+});
+
+say(DEMO.intro, "bot");
+</script>
+</body>
+</html>
