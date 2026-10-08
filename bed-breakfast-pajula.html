@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}</style>
+<title>Bed & Breakfast Pajula Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --hue: 200;
+    --bg: hsl(var(--hue) 25% 96%);
+    --panel: #ffffff;
+    --ink: hsl(var(--hue) 30% 12%);
+    --muted: hsl(var(--hue) 12% 42%);
+    --line: hsl(var(--hue) 18% 88%);
+    --accent: hsl(var(--hue) 62% 38%);
+    --accent-ink: #ffffff;
+    --bot: hsl(var(--hue) 30% 94%);
+    --flag-bg: #fff4d6;
+    --flag-ink: #6b4a00;
+    font-family: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: hsl(var(--hue) 22% 9%);
+      --panel: hsl(var(--hue) 20% 13%);
+      --ink: hsl(var(--hue) 20% 92%);
+      --muted: hsl(var(--hue) 10% 66%);
+      --line: hsl(var(--hue) 15% 24%);
+      --accent: hsl(var(--hue) 60% 62%);
+      --accent-ink: hsl(var(--hue) 40% 10%);
+      --bot: hsl(var(--hue) 18% 19%);
+      --flag-bg: #3a2f10;
+      --flag-ink: #ffd98a;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: hsl(var(--hue) 22% 9%);
+    --panel: hsl(var(--hue) 20% 13%);
+    --ink: hsl(var(--hue) 20% 92%);
+    --muted: hsl(var(--hue) 10% 66%);
+    --line: hsl(var(--hue) 15% 24%);
+    --accent: hsl(var(--hue) 60% 62%);
+    --accent-ink: hsl(var(--hue) 40% 10%);
+    --bot: hsl(var(--hue) 18% 19%);
+    --flag-bg: #3a2f10;
+    --flag-ink: #ffd98a;
+  }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: inherit; font-size: 15px; line-height: 1.5;
+    padding-inline: 16px; padding-block: 16px; box-sizing: border-box;
+    display: flex; justify-content: center;
+  }
+  .app {
+    width: 100%; max-width: 440px; height: 100%; max-height: 760px;
+    display: flex; flex-direction: column;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
+  }
+  .flag {
+    background: var(--flag-bg); color: var(--flag-ink);
+    font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+    padding: 8px 14px; text-align: center;
+  }
+  header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+  .avatar {
+    width: 38px; height: 38px; border-radius: 50%; flex: none;
+    background: var(--accent); color: var(--accent-ink);
+    display: grid; place-items: center; font-weight: 700;
+  }
+  header h1 { font-size: 16px; margin: 0; text-wrap: balance; }
+  header a { font-size: 13px; color: var(--muted); text-decoration: none; }
+  header a:hover { text-decoration: underline; }
+  .log { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .msg { max-width: 85%; padding: 9px 13px; border-radius: 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .bot { background: var(--bot); align-self: flex-start; border-bottom-left-radius: 4px; }
+  .me { background: var(--accent); color: var(--accent-ink); align-self: flex-end; border-bottom-right-radius: 4px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 16px 12px; }
+  .chips button {
+    font: inherit; font-size: 13px; cursor: pointer;
+    background: transparent; color: var(--accent);
+    border: 1px solid var(--accent); border-radius: 999px; padding: 5px 11px;
+  }
+  .chips button:hover { background: var(--bot); }
+  form { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--line); }
+  input {
+    flex: 1; min-width: 0; font: inherit; color: var(--ink); background: var(--bg);
+    border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px;
+  }
+  form button {
+    font: inherit; font-weight: 600; cursor: pointer;
+    background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 10px; padding: 0 16px;
+  }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .note { font-size: 12px; color: var(--muted); text-align: center; padding: 0 16px 12px; margin: 0; }
+</style>
+
+</head>
+<body>
+<div class="app">
+  <div class="flag">EXAMPLE · demo chatbot, not official</div>
+  <header>
+    <div class="avatar" id="avatar"></div>
+    <div>
+      <h1 id="name"></h1>
+      <a id="site" target="_blank" rel="noopener"></a>
+    </div>
+  </header>
+  <div class="log" id="log" aria-live="polite"></div>
+  <div class="chips" id="chips"></div>
+  <form id="form">
+    <input id="q" autocomplete="off" placeholder="Type a question…" aria-label="Your question">
+    <button type="submit">Send</button>
+  </form>
+  <p class="note">Keyword-based example built from public info on the company's website.</p>
+</div>
+
+<script>
+const DEMO = {"name":"Bed & Breakfast Pajula","site":"https://www.bbpajula.fi","hue":95,"intro":"Hi! I'm the Pajula assistant (example). Ask me about our rooms, sauna, camper parking, events or check-in times in Järvenpää.","chips":["What rooms do you have?","What are check-in and check-out times?","How much is camper parking?","Do you have a sauna?","Can we hold an event or meeting?","What is the cancellation policy?"],"kb":[[[" camper"," caravan"," motorhome"," rv"," matkaparkki"," campsite"," parking"," park"],"Pajulan Matkaparkki offers parking for cars, trucks, motorhomes, caravans, bicycles and motorcycles. Prices: 28 € per vehicle per day incl. electricity, or 48 € per vehicle per day incl. electricity, shower, sauna, WC, water point, grill shelter, Weber grill and open fire place (VAT 13.5 % included). Always call +358 40 355 35 66 first to check there is space (no text messages). Parking is free for accommodation guests."],[[" cancel"," cancellation"," refund"],"Cancellation is free up to 7 days before arrival. Cancelling 1-6 days before: the first night is charged. After the stay has started, the full price is charged. Whole-house bookings have their own terms (50 % deposit when booked more than a month ahead)."],[[" check in"," checkin"," check out"," checkout"," arrival"," arrive"," time"],"Check-in starts at 16:00 and check-out is at 12:00. Doors use Yale code locks. Quiet hours in the guest house are 22:00-06:00."],[[" sauna"," hot tub"," jacuzzi"," peat"],"The guest house has a traditional wood-heated sauna. A sauna and hot tub wagon can also be rented, and Pajula offers a peat sauna experience."],[[" event"," events"," party"," wedding"," meeting"," meetings"," conference"," celebration"],"Pajula Majatalo has a meeting room for max. 6 people with Wi-Fi, video projector, whiteboard and flipchart, plus a covered grill lounge and the KonttiBaari container bar (with alcohol license). Villa Pajula can host parties for up to 150 people, with a swimming pool (separate booking) and large terraces. Contact myynti@bbpajula.fi for events."],[[" experience"," experiences"," helicopter"," wine"," tasting"," sandbox"," excavator"," activity"," activities"],"Experiences at Pajula: XL sandbox for adults with a real excavator, peat sauna, helicopter flights, wine tasting (with cheeses or chocolates) and the Life Vision workshop. Ask at myynti@bbpajula.fi."],[[" breakfast"," food"," eat"," kitchen"," coffee"],"Breakfast is available as an extra service. Guests share a kitchen, and free organic coffee and herbal tea are included throughout your stay. There is also a Weber gas grill on the terrace."],[[" room"," rooms"," bed"," beds"," accommodation"," stay"," whole house"],"We have four rooms: Villiviini, Ukkolaukka, Keijunmekko and Laventeli, with comfortable Finnish beds. Guests share the kitchen, living room, sauna/shower and WC. You can also rent the whole guest house for your own group. An extra bed in Villiviini is 30 €/night."],[[" laundry"," wash"," transport"," airport"," taxi"," bike"," bicycle"],"Extra services: laundry & drying 15 € (detergent included), transport services such as airport transfers, and bicycles (ask at the office)."],[[" where"," location"," address"," train"," directions"," helsinki"],"Pajula is at Kiteentie 16, 04410 Järvenpää, near Haarjoki train station, about 1 km from the Järvenpää pohjoinen exit of Highway 5. Helsinki is just 25 minutes by train."],[[" smoke"," smoking"," rules"," quiet"],"Smoking is not allowed indoors; there is a designated outdoor smoking area. Quiet hours are 22:00-06:00."],[[" book"," booking"," reserve"," reservation"," contact"," email"," phone"," price"," prices"],"For accommodation and camper parking: info@bbpajula.fi. For sauna, events and meetings: myynti@bbpajula.fi. Phone: +358 40 355 35 66. There is also a contact form on the website."]],"contact":"info@bbpajula.fi / +358 40 355 35 66 (https://bbpajula.fi/yhteystiedot/)"};
+
+document.documentElement.style.setProperty("--hue", DEMO.hue ?? 200);
+document.getElementById("name").textContent = DEMO.name;
+document.getElementById("avatar").textContent = (DEMO.name || "?").trim().charAt(0).toUpperCase();
+const siteLink = document.getElementById("site");
+siteLink.href = DEMO.site;
+siteLink.textContent = DEMO.site.replace(/^https?:\/\//, "").replace(/\/$/, "");
+
+const log = document.getElementById("log");
+function say(text, who) {
+  const el = document.createElement("div");
+  el.className = "msg " + who;
+  el.textContent = text;
+  log.appendChild(el);
+  log.scrollTop = log.scrollHeight;
+}
+
+function answer(question) {
+  const text = " " + question.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ") + " ";
+  for (const [keys, reply] of DEMO.kb) {
+    if (keys.some(k => text.includes(k.toLowerCase()))) return reply;
+  }
+  return "I don't have that answer in this example. You can contact the team directly: " + DEMO.contact;
+}
+
+function ask(question) {
+  question = question.trim();
+  if (!question) return;
+  say(question, "me");
+  setTimeout(() => say(answer(question), "bot"), 350);
+}
+
+const chips = document.getElementById("chips");
+for (const c of DEMO.chips) {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.textContent = c;
+  b.addEventListener("click", () => ask(c));
+  chips.appendChild(b);
+}
+
+document.getElementById("form").addEventListener("submit", e => {
+  e.preventDefault();
+  const q = document.getElementById("q");
+  ask(q.value);
+  q.value = "";
+});
+
+say(DEMO.intro, "bot");
+</script>
+</body>
+</html>
