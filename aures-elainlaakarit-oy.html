@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}</style>
+<title>Aures Eläinlääkärit Oy Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --hue: 200;
+    --bg: hsl(var(--hue) 25% 96%);
+    --panel: #ffffff;
+    --ink: hsl(var(--hue) 30% 12%);
+    --muted: hsl(var(--hue) 12% 42%);
+    --line: hsl(var(--hue) 18% 88%);
+    --accent: hsl(var(--hue) 62% 38%);
+    --accent-ink: #ffffff;
+    --bot: hsl(var(--hue) 30% 94%);
+    --flag-bg: #fff4d6;
+    --flag-ink: #6b4a00;
+    font-family: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: hsl(var(--hue) 22% 9%);
+      --panel: hsl(var(--hue) 20% 13%);
+      --ink: hsl(var(--hue) 20% 92%);
+      --muted: hsl(var(--hue) 10% 66%);
+      --line: hsl(var(--hue) 15% 24%);
+      --accent: hsl(var(--hue) 60% 62%);
+      --accent-ink: hsl(var(--hue) 40% 10%);
+      --bot: hsl(var(--hue) 18% 19%);
+      --flag-bg: #3a2f10;
+      --flag-ink: #ffd98a;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: hsl(var(--hue) 22% 9%);
+    --panel: hsl(var(--hue) 20% 13%);
+    --ink: hsl(var(--hue) 20% 92%);
+    --muted: hsl(var(--hue) 10% 66%);
+    --line: hsl(var(--hue) 15% 24%);
+    --accent: hsl(var(--hue) 60% 62%);
+    --accent-ink: hsl(var(--hue) 40% 10%);
+    --bot: hsl(var(--hue) 18% 19%);
+    --flag-bg: #3a2f10;
+    --flag-ink: #ffd98a;
+  }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: inherit; font-size: 15px; line-height: 1.5;
+    padding-inline: 16px; padding-block: 16px; box-sizing: border-box;
+    display: flex; justify-content: center;
+  }
+  .app {
+    width: 100%; max-width: 440px; height: 100%; max-height: 760px;
+    display: flex; flex-direction: column;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
+  }
+  .flag {
+    background: var(--flag-bg); color: var(--flag-ink);
+    font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+    padding: 8px 14px; text-align: center;
+  }
+  header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+  .avatar {
+    width: 38px; height: 38px; border-radius: 50%; flex: none;
+    background: var(--accent); color: var(--accent-ink);
+    display: grid; place-items: center; font-weight: 700;
+  }
+  header h1 { font-size: 16px; margin: 0; text-wrap: balance; }
+  header a { font-size: 13px; color: var(--muted); text-decoration: none; }
+  header a:hover { text-decoration: underline; }
+  .log { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .msg { max-width: 85%; padding: 9px 13px; border-radius: 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .bot { background: var(--bot); align-self: flex-start; border-bottom-left-radius: 4px; }
+  .me { background: var(--accent); color: var(--accent-ink); align-self: flex-end; border-bottom-right-radius: 4px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 16px 12px; }
+  .chips button {
+    font: inherit; font-size: 13px; cursor: pointer;
+    background: transparent; color: var(--accent);
+    border: 1px solid var(--accent); border-radius: 999px; padding: 5px 11px;
+  }
+  .chips button:hover { background: var(--bot); }
+  form { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--line); }
+  input {
+    flex: 1; min-width: 0; font: inherit; color: var(--ink); background: var(--bg);
+    border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px;
+  }
+  form button {
+    font: inherit; font-weight: 600; cursor: pointer;
+    background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 10px; padding: 0 16px;
+  }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .note { font-size: 12px; color: var(--muted); text-align: center; padding: 0 16px 12px; margin: 0; }
+</style>
+
+</head>
+<body>
+<div class="app">
+  <div class="flag">EXAMPLE · demo chatbot, not official</div>
+  <header>
+    <div class="avatar" id="avatar"></div>
+    <div>
+      <h1 id="name"></h1>
+      <a id="site" target="_blank" rel="noopener"></a>
+    </div>
+  </header>
+  <div class="log" id="log" aria-live="polite"></div>
+  <div class="chips" id="chips"></div>
+  <form id="form">
+    <input id="q" autocomplete="off" placeholder="Type a question…" aria-label="Your question">
+    <button type="submit">Send</button>
+  </form>
+  <p class="note">Keyword-based example built from public info on the company's website.</p>
+</div>
+
+<script>
+const DEMO = {"name":"Aures Eläinlääkärit Oy","site":"https://www.aureselainlaakarit.fi/","hue":190,"intro":"Hi! I'm the Aures Eläinlääkärit example assistant. Aures is a skin and ear veterinary clinic for dogs and cats in Malmi, Helsinki. Ask me about opening hours, booking, prices, services or payment. For any question about your pet's health, please call us or book an appointment.","chips":["What are your opening hours?","How do I book an appointment?","How much does a visit cost?","Which payment methods do you accept?","What services do you offer?","Where is the clinic?"],"kb":[[[" hour"," open"," close"," closed"," when"],"We are open Monday to Friday, 9:00–18:00."],[[" book"," booking"," appointment"," reserve"," reservation"," time slot"],"You can see free times and book online 24/7 through the booking page on our website, or call us on 09 3152 6000 (Mon–Fri 9–18). Pet owners can book directly."],[[" cancel"," cancellation"," reschedule"],"Cancellations must be made by phone during clinic hours, at the latest on the weekday before the appointment. Late cancellation fees range from 80 € to 180 € depending on the appointment type."],[[" price"," cost"," fee"," how much"," visit"," euro"],"Dermatology visits: 30 min 245 €, 45 min 327 €, 60 min 409 € (with a diplomat surcharge of 20–40 € for Kirsti Schildt or Jonna Juhola). Remote consultation: 15 min 75 €, 30 min 110 €. All prices include VAT. Full price list on our website."],[[" otoscop"," flush"," ear clean"],"Ear flushing with video-otoscopy costs 795 € including anaesthesia (anaesthetic drugs and take-home medications are billed separately). Giant dog surcharge: 60 € over 50 kg, 120 € over 70 kg."],[[" ct"," imaging"," scan"],"We offer imaging of the ear structures (CT). Price: 391–432 € with sedation/IV anaesthesia or 495–535 € intubated, plus anaesthetic drugs."],[[" biops"],"Skin biopsy: 460 € under anaesthesia or 360 € with local anaesthesia, plus pathology report (146–186 €) and drugs."],[[" pay"," payment"," card"," cash"," resurs"," credit"," financ"],"You can pay by bank or credit card, cash, or with Resurs Bank consumer credit."],[[" insurance"," reimburs"," direct billing"],"We do not have direct reimbursement (direct billing) with insurance companies."],[[" service"," offer"," treat"," speciali"],"We are specialised in skin and ear diseases: allergies (atopy and food allergy), ear infections, fungal infections, parasites, abnormal hair loss and immune-mediated skin diseases. Services include immunotherapy (desensitisation), ear flushing with video-otoscopy, ear imaging, dog allergy testing and CO2 laser surgery of interdigital nodules (valeantura) in dogs."],[[" allerg"," atopy"," atopic"," desensiti"," immunotherap"," itch"],"We do allergy testing for dogs and offer immunotherapy (desensitisation treatment) for atopic pets. To find out what suits your pet, please book a dermatology visit or call us on 09 3152 6000."],[[" laser"," valeantura"," paw"," interdigital"],"We remove inflamed interdigital nodules (valeantura) in dogs with a CO2 laser, under general anaesthesia. For an assessment, please book a visit or call us."],[[" dog"," cat"," animal"," pet"," rabbit"," horse"],"We are a small animal clinic treating dogs and cats."],[[" vet"," team"," doctor"," staff"," diplomat"," dermatolog"],"Our veterinarians are Kirsti Schildt and Jonna Juhola (both EBVS® European Specialists in Veterinary Dermatology, DipECVD), Lotta Pänkälä (small animal specialist), Katja Kyröläinen and Karita Leirisalo."],[[" referr"," referral"],"Pet owners can book directly. Referring veterinarians can find instructions on our website and may send patient information in advance by email."],[[" where"," address"," location"," find"," malmi"," direction"],"Our clinic is at Takoraudantie 6, 00700 Helsinki (Malmi). Postal address: Valuraudankuja 6, 00700 Helsinki."],[[" emergenc"," urgent"," sick"," symptom"," medicine"," dose"],"I can't give medical advice. Please call us on 09 3152 6000 (Mon–Fri 9–18) or book an appointment so our veterinarians can help your pet."],[[" contact"," phone"," call"," email"," mail"],"Phone 09 3152 6000 (Mon–Fri 9–18), email info@auresvet.fi."]],"contact":"info@auresvet.fi"};
+
+document.documentElement.style.setProperty("--hue", DEMO.hue ?? 200);
+document.getElementById("name").textContent = DEMO.name;
+document.getElementById("avatar").textContent = (DEMO.name || "?").trim().charAt(0).toUpperCase();
+const siteLink = document.getElementById("site");
+siteLink.href = DEMO.site;
+siteLink.textContent = DEMO.site.replace(/^https?:\/\//, "").replace(/\/$/, "");
+
+const log = document.getElementById("log");
+function say(text, who) {
+  const el = document.createElement("div");
+  el.className = "msg " + who;
+  el.textContent = text;
+  log.appendChild(el);
+  log.scrollTop = log.scrollHeight;
+}
+
+function answer(question) {
+  const text = " " + question.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ") + " ";
+  for (const [keys, reply] of DEMO.kb) {
+    if (keys.some(k => text.includes(k.toLowerCase()))) return reply;
+  }
+  return "I don't have that answer in this example. You can contact the team directly: " + DEMO.contact;
+}
+
+function ask(question) {
+  question = question.trim();
+  if (!question) return;
+  say(question, "me");
+  setTimeout(() => say(answer(question), "bot"), 350);
+}
+
+const chips = document.getElementById("chips");
+for (const c of DEMO.chips) {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.textContent = c;
+  b.addEventListener("click", () => ask(c));
+  chips.appendChild(b);
+}
+
+document.getElementById("form").addEventListener("submit", e => {
+  e.preventDefault();
+  const q = document.getElementById("q");
+  ask(q.value);
+  q.value = "";
+});
+
+say(DEMO.intro, "bot");
+</script>
+</body>
+</html>
