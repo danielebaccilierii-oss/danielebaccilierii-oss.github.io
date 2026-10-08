@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}</style>
+<title>Karaasi Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --hue: 200;
+    --bg: hsl(var(--hue) 25% 96%);
+    --panel: #ffffff;
+    --ink: hsl(var(--hue) 30% 12%);
+    --muted: hsl(var(--hue) 12% 42%);
+    --line: hsl(var(--hue) 18% 88%);
+    --accent: hsl(var(--hue) 62% 38%);
+    --accent-ink: #ffffff;
+    --bot: hsl(var(--hue) 30% 94%);
+    --flag-bg: #fff4d6;
+    --flag-ink: #6b4a00;
+    font-family: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: hsl(var(--hue) 22% 9%);
+      --panel: hsl(var(--hue) 20% 13%);
+      --ink: hsl(var(--hue) 20% 92%);
+      --muted: hsl(var(--hue) 10% 66%);
+      --line: hsl(var(--hue) 15% 24%);
+      --accent: hsl(var(--hue) 60% 62%);
+      --accent-ink: hsl(var(--hue) 40% 10%);
+      --bot: hsl(var(--hue) 18% 19%);
+      --flag-bg: #3a2f10;
+      --flag-ink: #ffd98a;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: hsl(var(--hue) 22% 9%);
+    --panel: hsl(var(--hue) 20% 13%);
+    --ink: hsl(var(--hue) 20% 92%);
+    --muted: hsl(var(--hue) 10% 66%);
+    --line: hsl(var(--hue) 15% 24%);
+    --accent: hsl(var(--hue) 60% 62%);
+    --accent-ink: hsl(var(--hue) 40% 10%);
+    --bot: hsl(var(--hue) 18% 19%);
+    --flag-bg: #3a2f10;
+    --flag-ink: #ffd98a;
+  }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: inherit; font-size: 15px; line-height: 1.5;
+    padding-inline: 16px; padding-block: 16px; box-sizing: border-box;
+    display: flex; justify-content: center;
+  }
+  .app {
+    width: 100%; max-width: 440px; height: 100%; max-height: 760px;
+    display: flex; flex-direction: column;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
+  }
+  .flag {
+    background: var(--flag-bg); color: var(--flag-ink);
+    font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+    padding: 8px 14px; text-align: center;
+  }
+  header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+  .avatar {
+    width: 38px; height: 38px; border-radius: 50%; flex: none;
+    background: var(--accent); color: var(--accent-ink);
+    display: grid; place-items: center; font-weight: 700;
+  }
+  header h1 { font-size: 16px; margin: 0; text-wrap: balance; }
+  header a { font-size: 13px; color: var(--muted); text-decoration: none; }
+  header a:hover { text-decoration: underline; }
+  .log { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .msg { max-width: 85%; padding: 9px 13px; border-radius: 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .bot { background: var(--bot); align-self: flex-start; border-bottom-left-radius: 4px; }
+  .me { background: var(--accent); color: var(--accent-ink); align-self: flex-end; border-bottom-right-radius: 4px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 16px 12px; }
+  .chips button {
+    font: inherit; font-size: 13px; cursor: pointer;
+    background: transparent; color: var(--accent);
+    border: 1px solid var(--accent); border-radius: 999px; padding: 5px 11px;
+  }
+  .chips button:hover { background: var(--bot); }
+  form { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--line); }
+  input {
+    flex: 1; min-width: 0; font: inherit; color: var(--ink); background: var(--bg);
+    border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px;
+  }
+  form button {
+    font: inherit; font-weight: 600; cursor: pointer;
+    background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 10px; padding: 0 16px;
+  }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .note { font-size: 12px; color: var(--muted); text-align: center; padding: 0 16px 12px; margin: 0; }
+</style>
+
+</head>
+<body>
+<div class="app">
+  <div class="flag">EXAMPLE · demo chatbot, not official</div>
+  <header>
+    <div class="avatar" id="avatar"></div>
+    <div>
+      <h1 id="name"></h1>
+      <a id="site" target="_blank" rel="noopener"></a>
+    </div>
+  </header>
+  <div class="log" id="log" aria-live="polite"></div>
+  <div class="chips" id="chips"></div>
+  <form id="form">
+    <input id="q" autocomplete="off" placeholder="Type a question…" aria-label="Your question">
+    <button type="submit">Send</button>
+  </form>
+  <p class="note">Keyword-based example built from public info on the company's website.</p>
+</div>
+
+<script>
+const DEMO = {"name":"Karaasi","site":"https://www.karaasi.com","hue":150,"intro":"Hi! I'm the Karaasi assistant (example). Ask me about maintenance and repairs, the paint shop, spare parts, opening hours or how to reach us in Espoo.","chips":["Which brands do you service?","What are your opening hours?","Where are you located?","Do you sell spare parts?","Do you have a paint shop?","Do you service hybrid or electric cars?"],"kb":[[[" brand"," brands"," make"," land rover"," range rover"," jaguar"," aston"," mg "," rover"," british"],"We specialise in British cars: Range Rover, Land Rover, Jaguar, Aston Martin, MG and Rover."],[[" hour"," hours"," open"," opening"," close"," when"],"We are open on weekdays from 8:00 to 17:00."],[[" where"," address"," location"," located"," espoo"," juvanmalmi"," find you"],"You can find us at Juvan Teollisuuskatu 10, 02920 Espoo, Finland."],[[" spare"," part"," parts"," salvage"," shipping"," deliver"],"We sell original manufacturer parts, branded alternatives, and new and salvage parts from current Land Rover and Jaguar vehicles. Spare parts are delivered throughout Finland. Spare parts phone: 050 320 6914."],[[" paint"," bodywork"," body shop"," insurance"," damage"," restoration"," restore"],"Our paint shop handles vehicle restoration and insurance damage repairs, using Mirka equipment, Spies-Hecker paint lines and an FAM paint booth. Paint shop phone: 050 367 1877."],[[" hybrid"," electric"," ev "," diagnostic"," diagnostics"],"Yes, we service hybrid and electric vehicles with current diagnostic tools."],[[" accessor"," off road"," offroad"," equipment"],"We offer off-road parts and equipment for Land Rover models."],[[" service"," maintenance"," repair"," repairs"," inspection"," record"],"We do maintenance, technical repairs, damage repairs and inspection repairs, with factory electronic maintenance records. Maintenance phone: 09 855 5617 or 0503586464 (also WhatsApp)."],[[" book"," booking"," appointment"," contact"," phone"," call"," email"," whatsapp"],"Maintenance: 09 855 5617 / 0503586464 (also WhatsApp), huolto@karaasi.com. General enquiries: tiedustelut@karaasi.com. Spare parts: 050 320 6914. Paint shop: 050 367 1877."],[[" history"," family"," years"," about"," who are"],"Karaasi is a family-owned business that has been working for about half a century."],[[" job"," jobs"," career"," careers"," work for"," hiring"],"You can find job opportunities on the Careers page of our website: https://www.karaasi.com/rekry"]],"contact":"huolto@karaasi.com or 09 855 5617"};
+
+document.documentElement.style.setProperty("--hue", DEMO.hue ?? 200);
+document.getElementById("name").textContent = DEMO.name;
+document.getElementById("avatar").textContent = (DEMO.name || "?").trim().charAt(0).toUpperCase();
+const siteLink = document.getElementById("site");
+siteLink.href = DEMO.site;
+siteLink.textContent = DEMO.site.replace(/^https?:\/\//, "").replace(/\/$/, "");
+
+const log = document.getElementById("log");
+function say(text, who) {
+  const el = document.createElement("div");
+  el.className = "msg " + who;
+  el.textContent = text;
+  log.appendChild(el);
+  log.scrollTop = log.scrollHeight;
+}
+
+function answer(question) {
+  const text = " " + question.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ") + " ";
+  for (const [keys, reply] of DEMO.kb) {
+    if (keys.some(k => text.includes(k.toLowerCase()))) return reply;
+  }
+  return "I don't have that answer in this example. You can contact the team directly: " + DEMO.contact;
+}
+
+function ask(question) {
+  question = question.trim();
+  if (!question) return;
+  say(question, "me");
+  setTimeout(() => say(answer(question), "bot"), 350);
+}
+
+const chips = document.getElementById("chips");
+for (const c of DEMO.chips) {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.textContent = c;
+  b.addEventListener("click", () => ask(c));
+  chips.appendChild(b);
+}
+
+document.getElementById("form").addEventListener("submit", e => {
+  e.preventDefault();
+  const q = document.getElementById("q");
+  ask(q.value);
+  q.value = "";
+});
+
+say(DEMO.intro, "bot");
+</script>
+</body>
+</html>
