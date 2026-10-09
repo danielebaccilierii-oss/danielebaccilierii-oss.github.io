@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}</style>
+<title>Autokoulu Proway Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --hue: 200;
+    --bg: hsl(var(--hue) 25% 96%);
+    --panel: #ffffff;
+    --ink: hsl(var(--hue) 30% 12%);
+    --muted: hsl(var(--hue) 12% 42%);
+    --line: hsl(var(--hue) 18% 88%);
+    --accent: hsl(var(--hue) 62% 38%);
+    --accent-ink: #ffffff;
+    --bot: hsl(var(--hue) 30% 94%);
+    --flag-bg: #fff4d6;
+    --flag-ink: #6b4a00;
+    font-family: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: hsl(var(--hue) 22% 9%);
+      --panel: hsl(var(--hue) 20% 13%);
+      --ink: hsl(var(--hue) 20% 92%);
+      --muted: hsl(var(--hue) 10% 66%);
+      --line: hsl(var(--hue) 15% 24%);
+      --accent: hsl(var(--hue) 60% 62%);
+      --accent-ink: hsl(var(--hue) 40% 10%);
+      --bot: hsl(var(--hue) 18% 19%);
+      --flag-bg: #3a2f10;
+      --flag-ink: #ffd98a;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: hsl(var(--hue) 22% 9%);
+    --panel: hsl(var(--hue) 20% 13%);
+    --ink: hsl(var(--hue) 20% 92%);
+    --muted: hsl(var(--hue) 10% 66%);
+    --line: hsl(var(--hue) 15% 24%);
+    --accent: hsl(var(--hue) 60% 62%);
+    --accent-ink: hsl(var(--hue) 40% 10%);
+    --bot: hsl(var(--hue) 18% 19%);
+    --flag-bg: #3a2f10;
+    --flag-ink: #ffd98a;
+  }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: inherit; font-size: 15px; line-height: 1.5;
+    padding-inline: 16px; padding-block: 16px; box-sizing: border-box;
+    display: flex; justify-content: center;
+  }
+  .app {
+    width: 100%; max-width: 440px; height: 100%; max-height: 760px;
+    display: flex; flex-direction: column;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
+  }
+  .flag {
+    background: var(--flag-bg); color: var(--flag-ink);
+    font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+    padding: 8px 14px; text-align: center;
+  }
+  header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+  .avatar {
+    width: 38px; height: 38px; border-radius: 50%; flex: none;
+    background: var(--accent); color: var(--accent-ink);
+    display: grid; place-items: center; font-weight: 700;
+  }
+  header h1 { font-size: 16px; margin: 0; text-wrap: balance; }
+  header a { font-size: 13px; color: var(--muted); text-decoration: none; }
+  header a:hover { text-decoration: underline; }
+  .log { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .msg { max-width: 85%; padding: 9px 13px; border-radius: 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .bot { background: var(--bot); align-self: flex-start; border-bottom-left-radius: 4px; }
+  .me { background: var(--accent); color: var(--accent-ink); align-self: flex-end; border-bottom-right-radius: 4px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 16px 12px; }
+  .chips button {
+    font: inherit; font-size: 13px; cursor: pointer;
+    background: transparent; color: var(--accent);
+    border: 1px solid var(--accent); border-radius: 999px; padding: 5px 11px;
+  }
+  .chips button:hover { background: var(--bot); }
+  form { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--line); }
+  input {
+    flex: 1; min-width: 0; font: inherit; color: var(--ink); background: var(--bg);
+    border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px;
+  }
+  form button {
+    font: inherit; font-weight: 600; cursor: pointer;
+    background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 10px; padding: 0 16px;
+  }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .note { font-size: 12px; color: var(--muted); text-align: center; padding: 0 16px 12px; margin: 0; }
+</style>
+
+</head>
+<body>
+<div class="app">
+  <div class="flag">EXAMPLE · demo chatbot, not official</div>
+  <header>
+    <div class="avatar" id="avatar"></div>
+    <div>
+      <h1 id="name"></h1>
+      <a id="site" target="_blank" rel="noopener"></a>
+    </div>
+  </header>
+  <div class="log" id="log" aria-live="polite"></div>
+  <div class="chips" id="chips"></div>
+  <form id="form">
+    <input id="q" autocomplete="off" placeholder="Type a question…" aria-label="Your question">
+    <button type="submit">Send</button>
+  </form>
+  <p class="note">Keyword-based example built from public info on the company's website.</p>
+</div>
+
+<script>
+const DEMO = {"name":"Autokoulu Proway","site":"https://www.autokouluespoo.fi/","hue":210,"intro":"Hi! I'm the Autokoulu Proway assistant (example). Ask me about B-licence courses, lessons in English, prices, payment options or how to enroll.","chips":["Do you teach in English?","How much does a car licence cost?","How do I enroll?","Can I pay in instalments?","Where are you located?","I'm nervous about driving"],"kb":[[[" english"," international"," foreigner"," finnish"],"Yes! Our 'Driving school' course is taught fully in English (no fluent Finnish needed): €1559 with an automatic car, manual car +€100. It includes EAS and RTK training online, 10 driving hours in a real car, RTK drives (3 h in a car + 2 h in a simulator), study materials and theory test practice, and the car for your first driving test. We use a brand-new Seat Ibiza automatic. Authority fees are extra: licence application to Traficom €28/45, theory exam €46, driving exam €110 (Ajovarma)."],[[" enrol"," sign up"," register"," registration"," join"," book"],"You can sign up online through the 'Ilmoittaudu tästä' / 'Sign up here' buttons on our website (eAutokoulu). You can also enroll at our office: please book a time in advance and bring a valid ID. Questions? Call 050 308 1644."],[[" pay"," instal"," financ"," invoice"," credit"," loan"," resurs"," paytrail"," cash"," card"],"We have flexible payment options: online payment via Paytrail; invoicing (start payment €135, then the rest in two or separately agreed instalments, +€5 invoicing fee); or the Resurs Bank 'Autokoulutili' account with up to 12 months interest-free payment time. At the office you can also pay with the most common debit and credit cards or cash."],[[" cancel"," cancellation"," reschedule"," miss"],"A driving lesson cancelled by 12:00 on the previous day costs €0. A lesson that is not cancelled in time is charged €95."],[[" extra lesson"," additional lesson"," more lessons"," extra driving"],"Extra driving lesson: €95. A package of three extra lessons: €265 (€20 discount)."],[[" retake"," re take"," failed"," again"," second test"],"Using our car in a retake driving test costs €135. Course packages already include the car for your first driving test."],[[" fees"," traficom"," ajovarma"," theory exam"," theory test"," exam fee"," authority"],"Course prices don't include authority fees: driving licence application (Traficom) €28, theory test (Ajovarma) €46, driving test (Ajovarma) €110. Slippery-track practice on a real track with a real car (UAR) is €135."],[[" nervous"," anxiety"," anxious"," afraid"," fear"," scared"," confidence"," refresh"," special needs"," support"],"You're not alone with that feeling. We are experts in driving anxiety and teach calmly and encouragingly, and we have a special-education teacher if you need extra support. Already have a licence but find driving hard? Driving coaching: 50 min €90, 3 x 50 min €250, 5 x 50 min €400."],[[" assessment"," doctor"," medical"," health"],"We can carry out a doctor-ordered, health-based driving ability assessment, including reviewing the referral, an interview, a plan, a driving sample (if possible in your own car) and a written statement. Price: €200."],[[" teaching permit"," opetuslupa"," permit"," teach my"," parent"," relative"],"Teaching permit (opetuslupa) packages: study material €60; EAS 4 h online €65; EAS + material €110; RTK Basic €439; RTK Pro €569; EAS + material + RTK Basic €489; EAS + material + RTK Pro €619; driving test coaching 3 h €285. Packages are paid at enrollment and online access is activated within about 24 h."],[[" rtk"," law"," risk"," simulator"," slippery"," dark"],"From 1.10.2026 the RTK (risk) training is 12 lessons in total: 5 driving lessons (at our school max 2 in a simulator, for dark and slippery driving) and 7 theory lessons online. Our course packages are updated to the new amount."],[[" automatic"," manual"," gearbox"," car do you"],"Our teaching cars are new and we also teach with an automatic. Courses are available with a manual or an automatic car."],[[" pick up"," pickup"," pick me"," helsinki"," vantaa"],"We give driving lessons in Espoo and also in the Helsinki and Vantaa area. When possible, we can usually pick you up for lessons from nearby areas."],[[" fast"," quick"," how long"," month"," waiting"," queue"],"We have no teaching backlog, so you can get your driving licence training done in even about a month, if that suits you."],[[" where"," address"," located"," location"," sello"," leppävaara"," leppavaara"," train"," bus"],"Autokoulu Proway, Ratsukatu 4 B, 02600 Espoo (Leppävaara). Easy to reach on foot, by bus or by train: Sello shopping centre is next door, just 50 m away."],[[" opening"," office"," visit"," come by"," when are you"],"We are usually at the office on Mondays 16:00-17:00 (please call to confirm: 050 308 1644). You can also agree on another time to visit."],[[" phone"," call"," contact"," email"," reach"],"Call us on 050 308 1644. If we can't answer, leave a message and we'll call you back."],[[" about"," family"," experience"," since"," why"],"We are a family business from Espoo, founded in 2008. Our teaching is based on positive pedagogy: calm teachers, encouraging instruction and practice with a real car in real traffic."],[[" price"," cost"," how much"," course"," licence"," license"," package"," lessons"," car "," b "],"B-licence courses (Finnish): Perus €1559 (15 driving lessons), Pro-suositus €1785 (18 lessons, live EAS theory in Finnish), Paras €1939 (20 lessons). In English: 'Driving school' €1559 (automatic, manual +€100). All include online theory, RTK training and the car for your first driving test. Authority fees are not included."]],"contact":"phone 050 308 1644"};
+
+document.documentElement.style.setProperty("--hue", DEMO.hue ?? 200);
+document.getElementById("name").textContent = DEMO.name;
+document.getElementById("avatar").textContent = (DEMO.name || "?").trim().charAt(0).toUpperCase();
+const siteLink = document.getElementById("site");
+siteLink.href = DEMO.site;
+siteLink.textContent = DEMO.site.replace(/^https?:\/\//, "").replace(/\/$/, "");
+
+const log = document.getElementById("log");
+function say(text, who) {
+  const el = document.createElement("div");
+  el.className = "msg " + who;
+  el.textContent = text;
+  log.appendChild(el);
+  log.scrollTop = log.scrollHeight;
+}
+
+function answer(question) {
+  const text = " " + question.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ") + " ";
+  for (const [keys, reply] of DEMO.kb) {
+    if (keys.some(k => text.includes(k.toLowerCase()))) return reply;
+  }
+  return "I don't have that answer in this example. You can contact the team directly: " + DEMO.contact;
+}
+
+function ask(question) {
+  question = question.trim();
+  if (!question) return;
+  say(question, "me");
+  setTimeout(() => say(answer(question), "bot"), 350);
+}
+
+const chips = document.getElementById("chips");
+for (const c of DEMO.chips) {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.textContent = c;
+  b.addEventListener("click", () => ask(c));
+  chips.appendChild(b);
+}
+
+document.getElementById("form").addEventListener("submit", e => {
+  e.preventDefault();
+  const q = document.getElementById("q");
+  ask(q.value);
+  q.value = "";
+});
+
+say(DEMO.intro, "bot");
+</script>
+</body>
+</html>
