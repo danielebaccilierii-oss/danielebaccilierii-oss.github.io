@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="fi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Thai O&#x27;Cha Sörnäinen — Sörnäinen, Helsinki</title>
+<meta name="description" content="Wok-hot Thai classics, fast, five minutes from Sörnäinen metro.">
+<meta name="theme-color" content="#F3F7EC">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Archivo+Black:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F3F7EC;--tx:#13230F;--ac:#16A34A;--ac2:#FACC15;--r:0px;
+--fh:"Archivo Black",serif;--fb:"Inter",system-ui,sans-serif;--case:uppercase}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font:16px/1.65 var(--fb);-webkit-font-smoothing:antialiased;overflow-x:hidden;padding-bottom:76px}
+a{color:inherit}h1,h2,h3{font-family:var(--fh);font-weight:400;text-transform:var(--case);line-height:.95;letter-spacing:-.01em}
+.demo{background:var(--tx);color:var(--bg);font-size:12px;text-align:center;padding:6px 12px;letter-spacing:.04em}
+nav{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px)}
+nav b{font-family:var(--fh);font-weight:400;font-size:20px;text-transform:var(--case)}
+.lang{display:flex;border:1px solid color-mix(in srgb,var(--tx) 30%,transparent);border-radius:999px;overflow:hidden}
+.lang button{background:none;border:0;color:var(--tx);font:500 12px var(--fb);padding:6px 11px;cursor:pointer}
+.lang button.on{background:var(--tx);color:var(--bg)}
+.hero{min-height:88svh;display:flex;flex-direction:column;justify-content:flex-end;padding:40px 20px 36px;position:relative;overflow:hidden}
+.hero .kick{font-size:13px;letter-spacing:.14em;text-transform:uppercase;opacity:.75;margin-bottom:14px}
+.hero h1{font-size:clamp(64px,19vw,210px);word-break:break-word}
+.hero h1 .w{display:inline-block}
+.hero p.lead{max-width:30ch;font-size:19px;margin:22px 0 28px}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--ac);color:#fff;text-decoration:none;font-weight:500;padding:16px 26px;border-radius:var(--r);font-size:16px}
+.btn.ghost{background:none;color:var(--tx);border:1.5px solid var(--tx)}
+.chip{display:inline-flex;gap:8px;align-items:center;font-size:14px;margin-top:22px;opacity:.85}
+.chip .st{color:var(--ac2);letter-spacing:2px}
+.blob{position:absolute;right:-18vw;top:6vh;width:70vw;max-width:620px;aspect-ratio:1;border-radius:50%;background:var(--ac);opacity:.92;z-index:-1}
+.blob2{position:absolute;right:22vw;top:38vh;width:22vw;max-width:180px;aspect-ratio:1;border-radius:50%;background:var(--ac2);z-index:-1}
+.hero-night .blob{opacity:.35;filter:blur(40px)}.hero-night .blob2{opacity:.4;filter:blur(30px)}
+.hero-street .blob{border-radius:0;transform:rotate(12deg)}.hero-street .blob2{border-radius:0}
+.badge{position:absolute;right:20px;top:20px;width:112px;height:112px}
+.badge text{font:500 10px var(--fb);fill:var(--tx);text-transform:uppercase}
+.tape{overflow:hidden;border-block:1.5px solid var(--tx);padding:14px 0;white-space:nowrap}
+.tape .in{display:inline-flex;gap:26px;animation:tape 40s linear infinite;font-family:var(--fh);font-size:26px;text-transform:var(--case)}
+.tape i{font-style:normal;color:var(--ac)}@keyframes tape{to{transform:translateX(-50%)}}
+section{padding:84px 20px;max-width:1080px;margin:0 auto}
+.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ac);margin-bottom:16px;display:block}
+h2{font-size:clamp(44px,11vw,104px);margin-bottom:34px}
+.cat{margin-bottom:40px}.cat h3{font-size:30px;display:flex;gap:14px;align-items:baseline;margin-bottom:14px}
+.cn{font:500 13px var(--fb);color:var(--ac)}
+.cat ul{list-style:none}.dish{display:flex;align-items:baseline;gap:10px;padding:13px 0;border-bottom:1px solid color-mix(in srgb,var(--tx) 14%,transparent);font-size:17px}
+.dots{flex:1;border-bottom:1px dotted color-mix(in srgb,var(--tx) 40%,transparent);transform:translateY(-4px)}.dp{font-variant-numeric:tabular-nums;font-weight:500}
+.story{font-family:var(--fh);font-size:clamp(30px,7.4vw,64px);line-height:1.08;text-transform:none}
+.story em{color:var(--ac);font-style:normal}
+.rev{background:var(--tx);color:var(--bg);border-radius:var(--r);padding:44px 26px;text-align:center}
+.rev .big{font-family:var(--fh);font-size:clamp(88px,26vw,170px);line-height:.9}
+.rev .st{color:var(--ac2);font-size:26px;letter-spacing:6px;margin:8px 0 6px}
+.rev .btn{margin-top:24px}
+.info{display:grid;gap:26px}@media(min-width:760px){.info{grid-template-columns:1fr 1fr}}
+table{width:100%;border-collapse:collapse;font-size:17px}td{padding:12px 0;border-bottom:1px solid color-mix(in srgb,var(--tx) 14%,transparent)}td:last-child{text-align:right;font-weight:500}
+iframe{width:100%;height:300px;border:0;border-radius:var(--r);filter:grayscale(.3)}
+footer{padding:60px 20px 40px;text-align:center;font-size:14px;opacity:.75}
+footer h2{opacity:1;font-size:clamp(40px,12vw,96px);margin-bottom:24px}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(3,1fr);background:var(--tx);padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
+.bar a{color:var(--bg);text-decoration:none;text-align:center;font-size:12px;font-weight:500;padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar svg{width:22px;height:22px}.bar a.main{background:var(--ac);color:#fff;border-radius:var(--r)}
+@media(min-width:900px){.bar{left:auto;right:24px;bottom:24px;width:360px;border-radius:16px}body{padding-bottom:0}}
+.reveal{opacity:0;transform:translateY(24px)}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}.tape .in{animation:none}}
+</style></head><body>
+<div class="demo"><span data-en="Demo prepared for Thai O&#x27;Cha Sörnäinen · sample content" data-fi="Demo Thai O&#x27;Cha Sörnäinen -ravintolalle · esimerkkisisältö">Demo Thai O&#x27;Cha Sörnäinen -ravintolalle · esimerkkisisältö</span></div>
+<nav><b>Thai O&#x27;Cha Sörnäinen</b><div class="lang"><button data-l="fi" class="on">FI</button><button data-l="en">EN</button></div></nav>
+<header class="hero hero-street" id="home">
+<div class="blob"></div><div class="blob2"></div>
+<svg class="badge" viewBox="0 0 120 120" aria-hidden="true"><defs><path id="c" d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0"/></defs>
+<text><textPath href="#c" textLength="286" lengthAdjust="spacing">Sörnäinen · Helsinki · Sörnäinen · Helsinki ·</textPath></text></svg>
+<div class="kick"><span data-en="Thai street food" data-fi="Thaimaalainen katuruoka">Thaimaalainen katuruoka</span></div>
+<h1><span class="w">Thai</span> <span class="w">O&#x27;Cha</span> <span class="w">Sörnäinen</span> </h1>
+<p class="lead" data-en="Wok-hot Thai classics, fast, five minutes from Sörnäinen metro." data-fi="Wokkikuumat thaiklassikot nopeasti, viisi minuuttia Sörnäisten metrolta.">Wokkikuumat thaiklassikot nopeasti, viisi minuuttia Sörnäisten metrolta.</p>
+<div><a class="btn" href="https://wa.me/358401234567?text=Hei+Thai+O%27Cha+S%C3%B6rn%C3%A4inen%21+"><span data-en="Order for pickup" data-fi="Tilaa noutoon">Tilaa noutoon</span> →</a></div>
+<div class="chip"><span class="st">★★★★☆</span><span data-en="4.3 on Google · 159 reviews" data-fi="4,3 Googlessa · 159 arvostelua">4,3 Googlessa · 159 arvostelua</span></div>
+</header>
+<div class="tape" aria-hidden="true"><div class="in"><span>Pad thai kanalla</span><i>✦</i><span>Pad kra pao</span><i>✦</i><span>Pad see ew</span><i>✦</i><span>Green curry</span><i>✦</i><span>Massaman curry</span><i>✦</i><span>Panang curry</span><i>✦</i><span>Kevätkääryleet (4 kpl)</span><i>✦</i><span>Tom yum -keitto</span><i>✦</i><span>Pad thai kanalla</span><i>✦</i><span>Pad kra pao</span><i>✦</i><span>Pad see ew</span><i>✦</i><span>Green curry</span><i>✦</i><span>Massaman curry</span><i>✦</i><span>Panang curry</span><i>✦</i><span>Kevätkääryleet (4 kpl)</span><i>✦</i><span>Tom yum -keitto</span><i>✦</i></div></div>
+<section id="menu"><span class="eyebrow"><span data-en="Menu" data-fi="Menu">Menu</span></span>
+<h2 class="reveal"><span data-en="What we cook" data-fi="Mitä teemme">Mitä teemme</span></h2><div class="cat"><h3 class="reveal"><span class="cn">01</span><span data-en="Wok" data-fi="Wokki">Wokki</span></h3><ul><li class="dish reveal"><span class="dn">Pad thai kanalla</span><span class="dots"></span><span class="dp">13.90 €</span></li><li class="dish reveal"><span class="dn">Pad kra pao</span><span class="dots"></span><span class="dp">13.90 €</span></li><li class="dish reveal"><span class="dn">Pad see ew</span><span class="dots"></span><span class="dp">14.50 €</span></li></ul></div><div class="cat"><h3 class="reveal"><span class="cn">02</span><span data-en="Curry" data-fi="Curry">Curry</span></h3><ul><li class="dish reveal"><span class="dn">Green curry</span><span class="dots"></span><span class="dp">14.50 €</span></li><li class="dish reveal"><span class="dn">Massaman curry</span><span class="dots"></span><span class="dp">15.50 €</span></li><li class="dish reveal"><span class="dn">Panang curry</span><span class="dots"></span><span class="dp">14.90 €</span></li></ul></div><div class="cat"><h3 class="reveal"><span class="cn">03</span><span data-en="Starters" data-fi="Alkuruoat">Alkuruoat</span></h3><ul><li class="dish reveal"><span class="dn">Kevätkääryleet (4 kpl)</span><span class="dots"></span><span class="dp">6.50 €</span></li><li class="dish reveal"><span class="dn">Tom yum -keitto</span><span class="dots"></span><span class="dp">8.90 €</span></li></ul></div></section>
+<section><span class="eyebrow"><span data-en="Our story" data-fi="Tarinamme">Tarinamme</span></span>
+<p class="story reveal" data-en="Pad thai tossed to order, green curry with fresh basil and a lunch that is ready before your break is over." data-fi="Pad thai tilauksesta paistettuna, vihreä curry tuoreella basilikalla ja lounas, joka on valmis ennen kuin taukosi loppuu.">Pad thai tilauksesta paistettuna, vihreä curry tuoreella basilikalla ja lounas, joka on valmis ennen kuin taukosi loppuu.</p></section>
+<section id="recensioni"><div class="rev reveal"><div class="big">4,3</div>
+<div class="st">★★★★☆</div><div data-en="159 reviews on Google" data-fi="159 arvostelua Googlessa">159 arvostelua Googlessa</div>
+<a class="btn" href="https://www.google.com/maps/search/?api=1&query=Thai+O%27Cha+S%C3%B6rn%C3%A4inen+Helsinginkatu+11%2C+00500+Helsinki" target="_blank" rel="noopener"><span data-en="Leave a review" data-fi="Jätä arvostelu">Jätä arvostelu</span> ★</a></div></section>
+<section id="contatti"><span class="eyebrow"><span data-en="Visit us" data-fi="Tervetuloa">Tervetuloa</span></span>
+<h2 class="reveal"><span data-en="Find us" data-fi="Löydä meidät">Löydä meidät</span></h2>
+<div class="info"><div><table><tr><td>Ma–Pe / Mon–Fri</td><td>10.30–21</td></tr><tr><td>La / Sat</td><td>12–21</td></tr><tr><td>Su / Sun</td><td>12–20</td></tr></table><p style="margin-top:20px;font-size:18px">Helsinginkatu 11, 00500 Helsinki</p>
+<p style="margin-top:20px"><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&query=Thai+O%27Cha+S%C3%B6rn%C3%A4inen+Helsinginkatu+11%2C+00500+Helsinki" target="_blank" rel="noopener"><span data-en="Directions" data-fi="Reittiohjeet">Reittiohjeet</span> ↗</a></p></div>
+<iframe loading="lazy" src="https://maps.google.com/maps?q=Helsinginkatu+11%2C+00500+Helsinki&z=16&output=embed" title="Map"></iframe></div></section>
+<footer><h2>Thai O&#x27;Cha Sörnäinen</h2><p>Helsinginkatu 11, 00500 Helsinki</p><p style="margin-top:8px"><span data-en="Site by Daniele · Web &amp; AI for Helsinki businesses" data-fi="Sivusto: Daniele · Web &amp; AI helsinkiläisille yrityksille">Sivusto: Daniele · Web &amp; AI helsinkiläisille yrityksille</span></p></footer>
+<div class="bar">
+<a href="tel:+358401234567"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg><span data-en="Call" data-fi="Soita">Soita</span></a>
+<a class="main" href="https://wa.me/358401234567?text=Hei+Thai+O%27Cha+S%C3%B6rn%C3%A4inen%21+"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.5A8.4 8.4 0 1 1 21 11.5z"/></svg><span data-en="Order for pickup" data-fi="Tilaa noutoon">Tilaa noutoon</span></a>
+<a href="https://www.google.com/maps/search/?api=1&query=Thai+O%27Cha+S%C3%B6rn%C3%A4inen+Helsinginkatu+11%2C+00500+Helsinki" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg><span data-en="Directions" data-fi="Reitti">Reitti</span></a>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+document.querySelectorAll('.lang button').forEach(b=>b.onclick=()=>{const l=b.dataset.l;document.documentElement.lang=l;
+document.querySelectorAll('.lang button').forEach(x=>x.classList.toggle('on',x===b));
+document.querySelectorAll('[data-'+l+']').forEach(e=>e.textContent=e.dataset[l]);});
+const calma=matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(window.gsap&&!calma){gsap.registerPlugin(ScrollTrigger);
+gsap.from('.hero h1 .w',{yPercent:110,opacity:0,duration:1,ease:'power4.out',stagger:.08});
+gsap.from('.hero .lead,.hero .btn,.hero .chip,.hero .kick',{y:20,opacity:0,duration:.8,delay:.35,stagger:.08});
+gsap.to('.blob',{yPercent:30,rotate:20,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}});
+gsap.to('.badge',{rotate:360,duration:24,repeat:-1,ease:'none'});
+gsap.utils.toArray('.reveal').forEach(e=>gsap.to(e,{opacity:1,y:0,duration:.8,ease:'power3.out',scrollTrigger:{trigger:e,start:'top 88%'}}));
+}else{document.querySelectorAll('.reveal').forEach(e=>{e.style.opacity=1;e.style.transform='none'});}
+</script></body></html>

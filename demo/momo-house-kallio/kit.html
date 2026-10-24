@@ -1,0 +1,33 @@
+<!doctype html><html lang="fi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+<title>Kit tavolo — Momo House Kallio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+@page{size:A4;margin:8mm}*{box-sizing:border-box;margin:0;padding:0}
+body{font:14px/1.4 Inter,sans-serif;color:#111;background:#e9e7e2}
+.tools{max-width:210mm;margin:16px auto;display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:0 12px}
+.tools button{background:#B91C1C;color:#fff;border:0;padding:12px 20px;font:500 15px Inter;border-radius:6px;cursor:pointer}
+.sheet{width:194mm;min-height:281mm;margin:0 auto 24px;background:#fff;display:grid;grid-template-rows:1fr 1fr;gap:0}
+.tents{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px dashed #aaa}
+.tent{display:grid;grid-template-rows:1fr 6mm 1fr;border-right:1px dashed #aaa}.tent:last-child{border-right:0}
+.top{transform:rotate(180deg)}
+.fold{border-top:1px dashed #999;position:relative}.fold:after{content:"piega qui · taita tästä";position:absolute;left:50%;top:-8px;transform:translateX(-50%);background:#fff;font-size:9px;color:#888;padding:0 6px}
+.face{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:6mm;border:3mm solid #B91C1C;border-width:0 0 2.5mm}
+.nm{font-family:"Playfair Display",serif;font-size:22px;text-align:center;line-height:1;color:#1F2A24}
+.qr{background:#fff;padding:3mm}.tx{font-size:10.5px;text-align:center;color:#333}
+.win{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:10mm;background:#B91C1C;color:#fff}
+.win .nm{color:#fff;font-size:40px}.win .qr{padding:5mm;border-radius:4mm}
+.win .tx{color:#fff;font-size:15px}
+@media print{body{background:#fff}.tools{display:none}.sheet{margin:0}}
+</style></head><body>
+<div class="tools"><button onclick="print()">Stampa / Tulosta</button>
+<span>A4 · ritaglia lungo il tratteggio e piega · leikkaa ja taita</span></div>
+<div class="sheet"><div class="tents"><div class="tent"><div class="top"><div class="face"><div class="nm">Momo House Kallio</div><div class="qr"></div><div class="tx"><b>Menu · Arvostelut</b><br>Skannaa kameralla · Scan with your camera</div></div></div><div class="fold"></div><div class="face"><div class="nm">Momo House Kallio</div><div class="qr"></div><div class="tx"><b>Menu · Arvostelut</b><br>Skannaa kameralla · Scan with your camera</div></div></div><div class="tent"><div class="top"><div class="face"><div class="nm">Momo House Kallio</div><div class="qr"></div><div class="tx"><b>Menu · Arvostelut</b><br>Skannaa kameralla · Scan with your camera</div></div></div><div class="fold"></div><div class="face"><div class="nm">Momo House Kallio</div><div class="qr"></div><div class="tx"><b>Menu · Arvostelut</b><br>Skannaa kameralla · Scan with your camera</div></div></div></div>
+<div class="win"><div class="nm">Momo House Kallio</div><div class="qr big"></div>
+<div class="tx"><b>Katso menu ja jätä arvostelu</b><br>See the menu and leave a review</div></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+const URL_DEST='https://danielebaccilierii-oss.github.io/demo/momo-house-kallio/#menu';
+document.querySelectorAll('.qr').forEach(e=>new QRCode(e,{text:URL_DEST,width:e.classList.contains('big')?300:150,
+height:e.classList.contains('big')?300:150,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H}));
+</script></body></html>
