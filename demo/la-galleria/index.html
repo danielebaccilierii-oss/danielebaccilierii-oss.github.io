@@ -182,12 +182,16 @@ footer .brand{font-size:1.6rem;margin-bottom:.6rem}
 .entrata .inner p{max-width:34rem;font-size:clamp(1rem,2.4vw,1.2rem);color:rgba(255,255,255,.88)}
 .entrata .row{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1.6rem}
 .entrata .hint{position:absolute;left:50%;bottom:1.2rem;transform:translateX(-50%);z-index:2;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;opacity:calc(1 - var(--p,0)*3)}
+@media (min-aspect-ratio:9/10){
+  .entrata .inner{max-width:min(46%,40rem)}
+  .entrata .velo{background:linear-gradient(90deg,rgba(11,10,9,.75),rgba(11,10,9,.15) 45%,rgba(11,10,9,0) 60%),linear-gradient(180deg,rgba(0,0,0,0) 60%,rgba(11,10,9,.85))}
+}
 @media (prefers-reduced-motion:reduce){.entrata{height:100svh}.entrata canvas{display:none}.entrata .inner{opacity:1;transform:none}}
 </style>
 </head>
 <body>
 <header><a class="brand" href="#top">La Galleria<small>Kluuvi · Helsinki</small></a><nav><a href="#ingresso"><span data-en="The place" data-fi="Paikka">Paikka</span></a><a href="#tarina"><span data-en="Story" data-fi="Tarina">Tarina</span></a><a href="#menu"><span data-en="Menu" data-fi="Ruokalista">Ruokalista</span></a><a href="#varaa"><span data-en="Book" data-fi="Varaa">Varaa</span></a><a href="#loyda"><span data-en="Find us" data-fi="Löydä meidät">Löydä meidät</span></a></nav><div class="actions"><div class="lang"><button type="button" data-l="fi">FI</button><button type="button" data-l="en">EN</button></div><a class="pill" href="#varaa"><span data-en="Book a table" data-fi="Varaa pöytä">Varaa pöytä</span></a></div></header>
-<section class="entrata" id="top" data-n="120" aria-label="La Galleria"><div class="palco"><img class="poster" src="ingresso/f001.webp" alt="La Galleria"><canvas aria-hidden="true"></canvas><div class="velo"></div><div class="inner"><div class="eyebrow">Kluuvi · Helsinki</div><h1>La Galleria</h1><p data-en="Italian restaurant · pizza from a golden oven" data-fi="Italialainen ravintola · pizzaa kultaisesta uunista">Italialainen ravintola · pizzaa kultaisesta uunista</p><div class="row"><a class="btn full" href="#varaa"><span data-en="Book a table" data-fi="Varaa pöytä">Varaa pöytä</span></a><a class="btn" href="#menu"><span data-en="See the menu" data-fi="Katso ruokalista">Katso ruokalista</span></a></div></div><div class="hint"><span data-en="Scroll to step inside" data-fi="Selaa ja astu sisään">Selaa ja astu sisään</span></div></div></section>
+<section class="entrata" id="top" data-n="170" aria-label="La Galleria"><div class="palco"><img class="poster" src="ingresso/f001.webp" alt="La Galleria"><canvas aria-hidden="true"></canvas><div class="velo"></div><div class="inner"><div class="eyebrow">Kluuvi · Helsinki</div><h1>La Galleria</h1><p data-en="Italian restaurant · pizza from a golden oven" data-fi="Italialainen ravintola · pizzaa kultaisesta uunista">Italialainen ravintola · pizzaa kultaisesta uunista</p><div class="row"><a class="btn full" href="#varaa"><span data-en="Book a table" data-fi="Varaa pöytä">Varaa pöytä</span></a><a class="btn" href="#menu"><span data-en="See the menu" data-fi="Katso ruokalista">Katso ruokalista</span></a></div></div><div class="hint"><span data-en="Scroll to step inside" data-fi="Selaa ja astu sisään">Selaa ja astu sisään</span></div></div></section>
 <section class="chapter " id="esterno">
 <div class="stage"><img src="foto/esterno-02-m.jpg" srcset="foto/esterno-02-m.jpg 900w, foto/esterno-02.jpg 2000w" sizes="(max-width:700px) 100vw, 60vw" width="2000" height="2000" loading="lazy" decoding="async" alt="La Galleria – Ulkoa" data-alt-en="La Galleria – Exterior" data-alt-fi="La Galleria – Ulkoa"></div>
 <div class="story"><div class="card reveal">
@@ -271,7 +275,8 @@ footer .brand{font-size:1.6rem;margin-bottom:.6rem}
   var ent=document.querySelector(".entrata");
   if(ent&&calma){ent.style.setProperty("--t",1)}
   if(ent&&!calma){
-    var N=+ent.dataset.n, cv=ent.querySelector("canvas"), cx=cv.getContext("2d"), imgs=[], ultimo=-1;
+    var N=+ent.dataset.n, cv=ent.querySelector("canvas"), cx=cv.getContext("2d"), imgs=[], ultimo=-1, ultimoT="";
+    var sf=document.createElement("canvas"), sx=sf.getContext("2d"), nt=document.createElement("canvas"), nx=nt.getContext("2d");
     function src(i){return "ingresso/f"+String(i+1).padStart(3,"0")+".webp"}
     function carica(i){if(!imgs[i]){imgs[i]=new Image();imgs[i].decoding="async";imgs[i].src=src(i)}return imgs[i]}
     // Prima un fotogramma su 8 (anteprima veloce), poi tutti gli altri
@@ -284,7 +289,23 @@ footer .brand{font-size:1.6rem;margin-bottom:.6rem}
       var w=cv.clientWidth*devicePixelRatio, h=cv.clientHeight*devicePixelRatio;
       if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h}
       var r=Math.max(w/im.naturalWidth,h/im.naturalHeight), iw=im.naturalWidth*r, ih=im.naturalHeight*r;
-      cx.drawImage(im,(w-iw)/2,(h-ih)/2,iw,ih);
+      var verticale=im.naturalHeight>im.naturalWidth, largo=w/h>.9;
+      if(!(verticale&&largo)){cx.drawImage(im,(w-iw)/2,(h-ih)/2,iw,ih);ent.classList.add("pronta");return}
+      // Schermo largo + video verticale: sotto lo stesso fotogramma a tutto schermo e sfocato,
+      // sopra il fotogramma nitido a tutta altezza con i bordi che si sciolgono nello sfocato.
+      sf.width=Math.max(8,Math.round(w/28)); sf.height=Math.max(8,Math.round(h/28));
+      sx.drawImage(im,(sf.width-iw/28)/2,(sf.height-ih/28)/2,iw/28,ih/28);
+      cx.imageSmoothingEnabled=true; cx.drawImage(sf,0,0,w,h);
+      cx.fillStyle="rgba(8,7,6,.42)"; cx.fillRect(0,0,w,h);
+      var ch=h, cw=Math.round(im.naturalWidth*h/im.naturalHeight), fs=Math.round(cw*.22);
+      var t=parseFloat(ent.style.getPropertyValue("--t"))||0;
+      var x0=(w-cw)/2, x1=w-cw-w*.06, x=Math.round(x0+(x1-x0)*t);   // a fine corsa si sposta a destra per fare posto al titolo
+      nt.width=cw; nt.height=ch; nx.globalCompositeOperation="source-over"; nx.drawImage(im,0,0,cw,ch);
+      var g=nx.createLinearGradient(0,0,cw,0);
+      g.addColorStop(0,"rgba(0,0,0,0)"); g.addColorStop(fs/cw,"rgba(0,0,0,1)");
+      g.addColorStop(1-fs/cw,"rgba(0,0,0,1)"); g.addColorStop(1,"rgba(0,0,0,0)");
+      nx.globalCompositeOperation="destination-in"; nx.fillStyle=g; nx.fillRect(0,0,cw,ch);
+      cx.drawImage(nt,x,0);
       ent.classList.add("pronta");
     }
     function giro(){
@@ -293,7 +314,8 @@ footer .brand{font-size:1.6rem;margin-bottom:.6rem}
       ent.style.setProperty("--p",p.toFixed(3));
       ent.style.setProperty("--t",Math.min(1,Math.max(0,(p-.72)/.22)).toFixed(3));
       var i=Math.min(N-1,Math.round(p*(N-1)));
-      if(i!==ultimo){ultimo=i;disegna(i)}
+      var tk=ent.style.getPropertyValue("--t");
+      if(i!==ultimo||tk!==ultimoT){ultimo=i;ultimoT=tk;disegna(i)}
     }
     addEventListener("scroll",giro,{passive:true});
     addEventListener("resize",function(){ultimo=-1;giro()});
