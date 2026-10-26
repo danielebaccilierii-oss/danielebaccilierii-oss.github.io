@@ -169,7 +169,7 @@ footer .brand{font-size:1.6rem;margin-bottom:.6rem}
   .reveal{opacity:1;transform:none}
 }
 /* ---------- ingresso cinematico (scroll = telecamera che entra) ---------- */
-.entrata{position:relative;height:420svh;background:#0b0a09}
+.entrata{position:relative;height:260svh;background:#0b0a09}
 .entrata .palco{position:sticky;top:0;height:100svh;overflow:hidden;color:#fff;display:flex;align-items:flex-end}
 .entrata canvas,.entrata .poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .entrata canvas{opacity:0;transition:opacity .4s}
@@ -181,7 +181,7 @@ footer .brand{font-size:1.6rem;margin-bottom:.6rem}
 .entrata .eyebrow{color:#fff}
 .entrata .inner p{max-width:34rem;font-size:clamp(1rem,2.4vw,1.2rem);color:rgba(255,255,255,.88)}
 .entrata .row{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1.6rem}
-.entrata .hint{position:absolute;left:50%;bottom:1.2rem;transform:translateX(-50%);z-index:2;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;opacity:calc(1 - var(--p,0)*3)}
+.entrata .hint{display:none}
 @media (min-aspect-ratio:9/10){
   .entrata .inner{max-width:min(46%,40rem)}
   .entrata .velo{background:linear-gradient(90deg,rgba(11,10,9,.75),rgba(11,10,9,.15) 45%,rgba(11,10,9,0) 60%),linear-gradient(180deg,rgba(0,0,0,0) 60%,rgba(11,10,9,.85))}
@@ -191,7 +191,7 @@ footer .brand{font-size:1.6rem;margin-bottom:.6rem}
 </head>
 <body>
 <header><a class="brand" href="#top">La Galleria<small>Kluuvi · Helsinki</small></a><nav><a href="#ingresso"><span data-en="The place" data-fi="Paikka">Paikka</span></a><a href="#tarina"><span data-en="Story" data-fi="Tarina">Tarina</span></a><a href="#menu"><span data-en="Menu" data-fi="Ruokalista">Ruokalista</span></a><a href="#varaa"><span data-en="Book" data-fi="Varaa">Varaa</span></a><a href="#loyda"><span data-en="Find us" data-fi="Löydä meidät">Löydä meidät</span></a></nav><div class="actions"><div class="lang"><button type="button" data-l="fi">FI</button><button type="button" data-l="en">EN</button></div><a class="pill" href="#varaa"><span data-en="Book a table" data-fi="Varaa pöytä">Varaa pöytä</span></a></div></header>
-<section class="entrata" id="top" data-n="170" aria-label="La Galleria"><div class="palco"><img class="poster" src="ingresso/f001.webp" alt="La Galleria"><canvas aria-hidden="true"></canvas><div class="velo"></div><div class="inner"><div class="eyebrow">Kluuvi · Helsinki</div><h1>La Galleria</h1><p data-en="Italian restaurant · pizza from a golden oven" data-fi="Italialainen ravintola · pizzaa kultaisesta uunista">Italialainen ravintola · pizzaa kultaisesta uunista</p><div class="row"><a class="btn full" href="#varaa"><span data-en="Book a table" data-fi="Varaa pöytä">Varaa pöytä</span></a><a class="btn" href="#menu"><span data-en="See the menu" data-fi="Katso ruokalista">Katso ruokalista</span></a></div></div><div class="hint"><span data-en="Scroll to step inside" data-fi="Selaa ja astu sisään">Selaa ja astu sisään</span></div></div></section>
+<section class="entrata" id="top" data-n="90" data-nl="90" aria-label="La Galleria"><div class="palco"><picture><source media="(min-aspect-ratio: 9/10)" srcset="ingresso-l/f001.webp"><img class="poster" src="ingresso/f001.webp" alt="La Galleria"></picture><canvas aria-hidden="true"></canvas><div class="velo"></div><div class="inner"><div class="eyebrow">Kluuvi · Helsinki</div><h1>La Galleria</h1><p data-en="Italian restaurant · pizza from a golden oven" data-fi="Italialainen ravintola · pizzaa kultaisesta uunista">Italialainen ravintola · pizzaa kultaisesta uunista</p><div class="row"><a class="btn full" href="#varaa"><span data-en="Book a table" data-fi="Varaa pöytä">Varaa pöytä</span></a><a class="btn" href="#menu"><span data-en="See the menu" data-fi="Katso ruokalista">Katso ruokalista</span></a></div></div><div class="hint"><span data-en="Scroll to step inside" data-fi="Selaa ja astu sisään">Selaa ja astu sisään</span></div></div></section>
 <section class="chapter " id="esterno">
 <div class="stage"><img src="foto/esterno-02-m.jpg" srcset="foto/esterno-02-m.jpg 900w, foto/esterno-02.jpg 2000w" sizes="(max-width:700px) 100vw, 60vw" width="2000" height="2000" loading="lazy" decoding="async" alt="La Galleria – Ulkoa" data-alt-en="La Galleria – Exterior" data-alt-fi="La Galleria – Ulkoa"></div>
 <div class="story"><div class="card reveal">
@@ -275,9 +275,10 @@ footer .brand{font-size:1.6rem;margin-bottom:.6rem}
   var ent=document.querySelector(".entrata");
   if(ent&&calma){ent.style.setProperty("--t",1)}
   if(ent&&!calma){
-    var N=+ent.dataset.n, cv=ent.querySelector("canvas"), cx=cv.getContext("2d"), imgs=[], ultimo=-1, ultimoT="";
+    var NL=+ent.dataset.nl||0, largoSet=NL>0&&innerWidth/innerHeight>.9, dir=largoSet?"ingresso-l":"ingresso";
+    var N=largoSet?NL:+ent.dataset.n, cv=ent.querySelector("canvas"), cx=cv.getContext("2d"), imgs=[], ultimo=-1, ultimoT="";
     var sf=document.createElement("canvas"), sx=sf.getContext("2d"), nt=document.createElement("canvas"), nx=nt.getContext("2d");
-    function src(i){return "ingresso/f"+String(i+1).padStart(3,"0")+".webp"}
+    function src(i){return dir+"/f"+String(i+1).padStart(3,"0")+".webp"}
     function carica(i){if(!imgs[i]){imgs[i]=new Image();imgs[i].decoding="async";imgs[i].src=src(i)}return imgs[i]}
     // Prima un fotogramma su 8 (anteprima veloce), poi tutti gli altri
     for(var s=0;s<N;s+=8)carica(s);
@@ -312,7 +313,8 @@ footer .brand{font-size:1.6rem;margin-bottom:.6rem}
       var r=ent.getBoundingClientRect(), corsa=ent.offsetHeight-innerHeight;
       var p=Math.min(1,Math.max(0,-r.top/corsa));
       ent.style.setProperty("--p",p.toFixed(3));
-      ent.style.setProperty("--t",Math.min(1,Math.max(0,(p-.72)/.22)).toFixed(3));
+      // nome visibile subito sulla pizza, sparisce mentre si scorre, torna alla fine
+      ent.style.setProperty("--t",Math.min(1,Math.max(0,1-p/.18,(p-.75)/.2)).toFixed(3));
       var i=Math.min(N-1,Math.round(p*(N-1)));
       var tk=ent.style.getPropertyValue("--t");
       if(i!==ultimo||tk!==ultimoT){ultimo=i;ultimoT=tk;disegna(i)}
